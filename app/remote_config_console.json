@@ -1,0 +1,68 @@
+{
+  "conditions": [
+    {
+      "name": "After 1-46",
+      "expression": "dateTime >= dateTime('2022-11-15T01:46:00', 'Asia/Jerusalem')",
+      "tagColor": "LIME"
+    },
+    {
+      "name": "blue for purchasers",
+      "expression": "app.audiences.inAtLeastOne(['Purchasers'])",
+      "tagColor": "BLUE"
+    },
+    {
+      "name": "Before 12",
+      "expression": "dateTime < dateTime('2022-11-13T12:00:00', 'Asia/Jerusalem')",
+      "tagColor": "GREEN"
+    },
+    {
+      "name": "Firebase Engage users",
+      "expression": "app.id == '1:266913646206:android:82b99e40167a8c23113a2f'",
+      "tagColor": "ORANGE"
+    },
+    {
+      "name": "Time based",
+      "expression": "dateTime >= dateTime('2022-11-15T12:26:00', 'Asia/Jerusalem')",
+      "tagColor": "PURPLE"
+    },
+    {
+      "name": "Purchasers orange",
+      "expression": "app.id == '1:266913646206:android:82b99e40167a8c23113a2f' && app.audiences.inAtLeastOne(['Purchasers'])",
+      "tagColor": "ORANGE"
+    }
+  ],
+  "parameters": {
+    "price_tag": {
+      "defaultValue": {
+        "value": "#5837AB"
+      },
+      "conditionalValues": {
+        "Purchasers orange": {
+          "value": "#E58331"
+        }
+      },
+      "valueType": "STRING"
+    },
+    "bg_color": {
+      "defaultValue": {
+        "value": "#EFEAE6"
+      },
+      "valueType": "STRING"
+    },
+    "btn_buy_color": {
+      "defaultValue": {
+        "useInAppDefault": true
+      },
+      "valueType": "STRING"
+    }
+  },
+  "version": {
+    "versionNumber": "74",
+    "updateTime": "2023-01-18T15:03:46.491909Z",
+    "updateUser": {
+      "email": "sokolovv@google.com"
+    },
+    "updateOrigin": "CONSOLE",
+    "updateType": "INCREMENTAL_UPDATE"
+  }
+}
