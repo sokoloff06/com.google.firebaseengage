@@ -7,7 +7,9 @@ package com.google.firebaseengage
 
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -39,6 +41,7 @@ import com.google.firebaseengage.cart.CartHandler
 import com.google.firebaseengage.catalog.CatalogFragment
 import com.google.firebaseengage.entities.Cart
 import com.google.firebaseengage.firebase.UtilActivity
+import org.json.JSONObject
 import java.util.UUID
 
 class MainActivity : AppCompatActivity(), CartHandler {
@@ -54,6 +57,7 @@ class MainActivity : AppCompatActivity(), CartHandler {
     companion object {
         const val LOG_TAG = "ENGAGE-DEBUG"
         const val FIRST_LAUNCH_KEY = "is_first_launch"
+        const val CONSENT_KEY = "consent_values"
 
         internal val fiamImpressionListener =
             FirebaseInAppMessagingImpressionListener { inAppMessage: InAppMessage? ->
@@ -83,7 +87,17 @@ class MainActivity : AppCompatActivity(), CartHandler {
         // Firebase Remote Config
         // RC Demo 1: set up remote config
         setUpRemoteConfig()
-        FirebaseAnalytics.getInstance(this).setUserId(UUID.randomUUID().toString());
+        val sp = getSharedPreferences("fruttify_prefs", MODE_PRIVATE)
+        if (!sp.contains(FIRST_LAUNCH_KEY)) {
+            Log.d(LOG_TAG, "first_launch")
+            FirebaseAnalytics.getInstance(this).setUserId(UUID.randomUUID().toString())
+            sp.edit()
+                .putBoolean(FIRST_LAUNCH_KEY, false)
+                .apply()
+        }
+        if (!sp.contains(CONSENT_KEY)) {
+            askUserConsent(sp)
+        }
         navDrawer = findViewById(R.id.drawer_layout)
         navigationView = findViewById(R.id.nav_view)
         swipeRefreshLayout = findViewById(R.id.swiperefresh)
@@ -98,18 +112,22 @@ class MainActivity : AppCompatActivity(), CartHandler {
                     val i = Intent(applicationContext, PromoActivity::class.java)
                     startActivity(i)
                 }
+
                 R.id.nav_util -> {
                     val i = Intent(applicationContext, UtilActivity::class.java)
                     startActivity(i)
                 }
+
                 R.id.nav_main -> {
                     val i = Intent(applicationContext, MainActivity::class.java)
                     startActivity(i)
                 }
+
                 R.id.nav_ads -> {
                     val i = Intent(applicationContext, AdsActivity::class.java)
                     startActivity(i)
                 }
+
                 else -> {}
             }
             true
@@ -248,30 +266,6 @@ class MainActivity : AppCompatActivity(), CartHandler {
         return cartAdapter
     }
 
-    companion object {
-        const val LOG_TAG = "ENGAGE-DEBUG"
-        internal val fiamImpressionListener =
-            FirebaseInAppMessagingImpressionListener { inAppMessage: InAppMessage? ->
-                Log.d(
-                    LOG_TAG,
-                    "FIAM impression:\n" +
-                            "Campaign ID: ${inAppMessage?.campaignMetadata?.campaignId}\n" +
-                            "Camp ID: ${inAppMessage?.campaignId}\n" +
-                            "Data: ${inAppMessage?.data}\n"
-                )
-            }
-        internal val fiamDismissLister =
-            FirebaseInAppMessagingDismissListener { inAppMessage: InAppMessage? ->
-                Log.d(
-                    LOG_TAG,
-                    "FIAM dismiss:\n" +
-                            "Campaign ID: ${inAppMessage?.campaignMetadata?.campaignId}\n" +
-                            "Camp ID: ${inAppMessage?.campaignId}\n" +
-                            "Data: ${inAppMessage?.data}\n"
-                )
-            }
-    }
-
     // Declare the launcher at the top of your Activity/Fragment:
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -300,5 +294,50 @@ class MainActivity : AppCompatActivity(), CartHandler {
                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
         }
+    }
+
+    private fun askUserConsent(sp: SharedPreferences) {
+        // Entries of the map are iterated in the order they were specified.
+        val userConsentMap = mutableMapOf(
+            FirebaseAnalytics.ConsentType.AD_STORAGE to FirebaseAnalytics.ConsentStatus.GRANTED,
+            FirebaseAnalytics.ConsentType.ANALYTICS_STORAGE to FirebaseAnalytics.ConsentStatus.GRANTED,
+            FirebaseAnalytics.ConsentType.AD_PERSONALIZATION to FirebaseAnalytics.ConsentStatus.GRANTED,
+            FirebaseAnalytics.ConsentType.AD_USER_DATA to FirebaseAnalytics.ConsentStatus.GRANTED,
+        )
+        val consentMapping = mapOf(
+            0 to FirebaseAnalytics.ConsentType.AD_STORAGE,
+            1 to FirebaseAnalytics.ConsentType.ANALYTICS_STORAGE,
+            2 to FirebaseAnalytics.ConsentType.AD_PERSONALIZATION,
+            3 to FirebaseAnalytics.ConsentType.AD_USER_DATA,
+        )
+        val userOptions = consentMapping.values.map { value -> value.name }.toTypedArray()
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder
+            .setCancelable(false)
+            .setTitle("Choose consent signals")
+            .setMultiChoiceItems(
+                userOptions,
+                null
+            ) { _, position, isChecked ->
+                run {
+                    val consentType = consentMapping[position]!!
+                    val selectedStatus: FirebaseAnalytics.ConsentStatus = if (isChecked) {
+                        FirebaseAnalytics.ConsentStatus.GRANTED
+                    } else {
+                        FirebaseAnalytics.ConsentStatus.DENIED
+                    }
+                    userConsentMap[consentType] = selectedStatus
+                }
+            }
+            .setPositiveButton("Confirm") { _, _ ->
+                Log.d(LOG_TAG, "Consent choice confirmed")
+                val userConsentJson = JSONObject(userConsentMap.toMap()).toString()
+                sp.edit()
+                    .putString(CONSENT_KEY,userConsentJson)
+                    .apply()
+                FirebaseAnalytics.getInstance(this).setConsent(userConsentMap)
+            }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
 }

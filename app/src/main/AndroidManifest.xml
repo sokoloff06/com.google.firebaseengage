@@ -91,4 +91,10 @@ See README(https://goo.gl/l4GJaQ) for more.
             android:value="true" />
     </application>
 
+    <!--    Google Ads references-->
+    <meta-data android:name="google_analytics_default_allow_analytics_storage" android:value="false" />
+    <meta-data android:name="google_analytics_default_allow_ad_storage" android:value="false" />
+    <meta-data android:name="google_analytics_default_allow_ad_user_data" android:value="false" />
+    <meta-data android:name="google_analytics_default_allow_ad_personalization" android:value="false" />
+
 </manifest>
