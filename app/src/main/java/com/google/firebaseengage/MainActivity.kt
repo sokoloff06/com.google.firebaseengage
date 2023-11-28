@@ -51,6 +51,32 @@ class MainActivity : AppCompatActivity(), CartHandler {
 
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
+    companion object {
+        const val LOG_TAG = "ENGAGE-DEBUG"
+        const val FIRST_LAUNCH_KEY = "is_first_launch"
+
+        internal val fiamImpressionListener =
+            FirebaseInAppMessagingImpressionListener { inAppMessage: InAppMessage? ->
+                Log.d(
+                    LOG_TAG,
+                    "FIAM impression:\n" +
+                            "Campaign ID: ${inAppMessage?.campaignMetadata?.campaignId}\n" +
+                            "Camp ID: ${inAppMessage?.campaignId}\n" +
+                            "Data: ${inAppMessage?.data}\n"
+                )
+            }
+        internal val fiamDismissLister =
+            FirebaseInAppMessagingDismissListener { inAppMessage: InAppMessage? ->
+                Log.d(
+                    LOG_TAG,
+                    "FIAM dismiss:\n" +
+                            "Campaign ID: ${inAppMessage?.campaignMetadata?.campaignId}\n" +
+                            "Camp ID: ${inAppMessage?.campaignId}\n" +
+                            "Data: ${inAppMessage?.data}\n"
+                )
+            }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

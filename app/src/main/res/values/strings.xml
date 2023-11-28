@@ -9,7 +9,7 @@
     <string name="network_error" translatable="true">Error during downloading data. Check network connection</string>
     <string name="title_activity_cart">CartActivity</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_main">Fruits Shop</string>
+    <string name="title_activity_main">Firebase Engage</string>
     <string name="order_cost">Total:</string>
     <string name="order_cost_default">0 €</string>
     <string name="buy_text">Send Purchase Data</string>
