@@ -6,13 +6,18 @@
 package com.google.firebaseengage
 
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -20,6 +25,12 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.inappmessaging.FirebaseInAppMessaging
+import com.google.firebase.inappmessaging.FirebaseInAppMessagingDismissListener
+import com.google.firebase.inappmessaging.FirebaseInAppMessagingImpressionListener
+import com.google.firebase.inappmessaging.display.FiamListener
+import com.google.firebase.inappmessaging.display.FirebaseInAppMessagingDisplay
+import com.google.firebase.inappmessaging.model.InAppMessage
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.firebaseengage.cart.CartAdapter
@@ -28,7 +39,7 @@ import com.google.firebaseengage.cart.CartHandler
 import com.google.firebaseengage.catalog.CatalogFragment
 import com.google.firebaseengage.entities.Cart
 import com.google.firebaseengage.firebase.UtilActivity
-import java.util.*
+import java.util.UUID
 
 class MainActivity : AppCompatActivity(), CartHandler {
     private lateinit var navigationView: NavigationView
@@ -97,6 +108,25 @@ class MainActivity : AppCompatActivity(), CartHandler {
         viewPager.adapter = pagerAdapter
         val tabLayout = findViewById<TabLayout>(R.id.tabs_selector)
         tabLayout.setupWithViewPager(viewPager)
+        askNotificationPermission()
+        registerFiamListener()
+    }
+
+    private fun registerFiamListener() {
+        FirebaseInAppMessagingDisplay.getInstance().setFiamListener(object : FiamListener {
+            override fun onFiamTrigger() {
+                Log.d(LOG_TAG, "onFiamTrigger")
+            }
+
+            override fun onFiamClick() {
+                Log.d(LOG_TAG, "onFiamClick")
+            }
+
+            override fun onFiamDismiss() {
+                Log.d(LOG_TAG, "onFiamDismiss")
+            }
+
+        })
     }
 
     private fun onSwipeUpdate() {
@@ -175,6 +205,8 @@ class MainActivity : AppCompatActivity(), CartHandler {
                     }
                 }*/
         }
+        FirebaseInAppMessaging.getInstance().addImpressionListener(fiamImpressionListener)
+        FirebaseInAppMessaging.getInstance().addDismissListener(fiamDismissLister)
     }
 
     override fun getCart(): Cart {
@@ -192,5 +224,55 @@ class MainActivity : AppCompatActivity(), CartHandler {
 
     companion object {
         const val LOG_TAG = "ENGAGE-DEBUG"
+        internal val fiamImpressionListener =
+            FirebaseInAppMessagingImpressionListener { inAppMessage: InAppMessage? ->
+                Log.d(
+                    LOG_TAG,
+                    "FIAM impression:\n" +
+                            "Campaign ID: ${inAppMessage?.campaignMetadata?.campaignId}\n" +
+                            "Camp ID: ${inAppMessage?.campaignId}\n" +
+                            "Data: ${inAppMessage?.data}\n"
+                )
+            }
+        internal val fiamDismissLister =
+            FirebaseInAppMessagingDismissListener { inAppMessage: InAppMessage? ->
+                Log.d(
+                    LOG_TAG,
+                    "FIAM dismiss:\n" +
+                            "Campaign ID: ${inAppMessage?.campaignMetadata?.campaignId}\n" +
+                            "Camp ID: ${inAppMessage?.campaignId}\n" +
+                            "Data: ${inAppMessage?.data}\n"
+                )
+            }
+    }
+
+    // Declare the launcher at the top of your Activity/Fragment:
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) {
+//        if (isGranted) {
+//            // FCM SDK (and your app) can post notifications.
+//        } else {
+//            // TODO: Inform user that that your app will not show notifications.
+//        }
+    }
+
+    private fun askNotificationPermission() {
+        // This is only necessary for API level >= 33 (TIRAMISU)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                PackageManager.PERMISSION_GRANTED
+            ) {
+                // FCM SDK (and your app) can post notifications already.
+//            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+//                // TODO: display an educational UI explaining to the user the features that will be enabled
+//                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
+//                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
+//                //       If the user selects "No thanks," allow the user to continue without notifications.
+            } else {
+                // Directly ask for the permission
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
     }
 }

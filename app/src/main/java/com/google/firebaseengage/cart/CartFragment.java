@@ -82,7 +82,7 @@ public class CartFragment extends Fragment {
                 Bundle eventParams = new Bundle();
                 double sum = cart.getSum();
                 EditText editText = rootView.findViewById(R.id.transaction_id_field);
-                eventParams.putString(FirebaseAnalytics.Param.CURRENCY, "EUR");
+                eventParams.putString(FirebaseAnalytics.Param.CURRENCY, "USD");
                 eventParams.putDouble(FirebaseAnalytics.Param.VALUE, sum);
                 eventParams.putString(FirebaseAnalytics.Param.TRANSACTION_ID, editText.getText().toString());
                 Log.d(LOG_TAG, "Logging event");

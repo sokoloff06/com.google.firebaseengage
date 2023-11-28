@@ -5,21 +5,18 @@
 
 package com.google.firebaseengage.firebase
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.inappmessaging.FirebaseInAppMessaging
 import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebaseengage.MainActivity
 import com.google.firebaseengage.MainActivity.Companion.LOG_TAG
 import com.google.firebaseengage.R
 import java.util.concurrent.ExecutorService
@@ -35,7 +32,6 @@ class UtilActivity : AppCompatActivity() {
     private lateinit var btnWelcome: Button
     private lateinit var btnCrash: Button
 
-
     companion object {
         val threadPool: ExecutorService = Executors.newCachedThreadPool()
     }
@@ -44,7 +40,6 @@ class UtilActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_util)
         Log.d(LOG_TAG, "onCreate: $intent")
-
         firebaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
         btnConversion = findViewById<Button>(R.id.btn_conversion).apply {
             setOnClickListener {
@@ -96,8 +91,6 @@ class UtilActivity : AppCompatActivity() {
                 throw java.lang.RuntimeException("Crashlytics Test")
             }
         }
-
-        askNotificationPermission()
     }
 
     private fun getFid() {
@@ -120,39 +113,15 @@ class UtilActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        FirebaseInAppMessaging.getInstance().addImpressionListener(MainActivity.fiamImpressionListener)
+        FirebaseInAppMessaging.getInstance().addDismissListener(MainActivity.fiamDismissLister)
+    }
+
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         Log.d(LOG_TAG, "onNewIntent: $intent")
-    }
-
-    // Declare the launcher at the top of your Activity/Fragment:
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) {
-//        if (isGranted) {
-//            // FCM SDK (and your app) can post notifications.
-//        } else {
-//            // TODO: Inform user that that your app will not show notifications.
-//        }
-    }
-
-    private fun askNotificationPermission() {
-        // This is only necessary for API level >= 33 (TIRAMISU)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
-                PackageManager.PERMISSION_GRANTED
-            ) {
-                // FCM SDK (and your app) can post notifications already.
-//            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-//                // TODO: display an educational UI explaining to the user the features that will be enabled
-//                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
-//                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
-//                //       If the user selects "No thanks," allow the user to continue without notifications.
-            } else {
-                // Directly ask for the permission
-                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-            }
-        }
     }
 
     // RC Demo 4: FCM Token

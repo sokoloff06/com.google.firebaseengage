@@ -7,6 +7,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- Optional : -->
@@ -41,7 +42,9 @@
         <activity
             android:name=".PromoActivity"
             android:exported="true">
-            <intent-filter android:autoVerify="true">
+            <intent-filter
+                android:autoVerify="true"
+                tools:targetApi="m">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -49,9 +52,8 @@
 
                 <data android:scheme="http" />
                 <data android:scheme="https" />
-                <data
-                    android:host="sokoloff06.github.io"
-                    android:path="/promo" />
+                <data android:host="sokoloff06.github.io"/>
+                <data android:path="/promo"/>
 
                 <tools:validation testUrl="https://sokoloff06.github.io/promo" />
             </intent-filter>
@@ -59,9 +61,7 @@
         <activity
             android:name=".firebase.UtilActivity"
             android:exported="true">
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-
+            <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
@@ -87,6 +87,8 @@ See README(https://goo.gl/l4GJaQ) for more.
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/orange_400" />
+        <meta-data android:name="delivery_metrics_exported_to_big_query_enabled"
+            android:value="true" />
     </application>
 
 </manifest>

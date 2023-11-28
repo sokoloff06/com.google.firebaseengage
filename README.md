@@ -9,6 +9,6 @@ Copyright 2021 Google LLC. This solution, including any related sample code or d
 [Firebase Engage: Remote Config, A/B Test and Personalization](https://marketingplatformacademy.withgoogle.com/events/fireside-engage-remote-config-ab-test-personalisation-details?mkt_tok=OTE3LVpNTC05ODAAAAGIGX2AMYndUs2Rhh7VOBM76e4DPC-Qxc1r4A9JCZZ4SqDeLZYC72MrKwb3dPBLGXLp7ojB1AdbyOBg2ojqzTBae1TPEmzBRA6ia00w)
 ## Usage
 1. [Register Android App in Firebase Console](https://firebase.google.com/docs/android/setup#create-firebase-project) **or** [rename package name](https://stackoverflow.com/questions/16804093/rename-package-in-android-studio) to match an app existing in the console  
-2. Replace `google-services.json` with yours [downloaded from the Firebase Console](https://support.google.com/firebase/answer/7015592?hl=en#android&zippy=%2Cin-this-article)
+2. Add `google-services.json` [downloaded from the Firebase Console](https://support.google.com/firebase/answer/7015592?hl=en#android&zippy=%2Cin-this-article)
 3. (OPTIONALLY) Upload remote_config_console.json to quickly reproduce Remote Configuration matching this app
 ![img.png](publish_config_from_file.png)
