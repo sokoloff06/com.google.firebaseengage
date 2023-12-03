@@ -24,6 +24,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager.widget.ViewPager
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -299,11 +300,12 @@ class MainActivity : AppCompatActivity(), CartHandler {
     private fun askUserConsent(sp: SharedPreferences) {
         // Entries of the map are iterated in the order they were specified.
         val userConsentMap = mutableMapOf(
-            FirebaseAnalytics.ConsentType.AD_STORAGE to FirebaseAnalytics.ConsentStatus.GRANTED,
-            FirebaseAnalytics.ConsentType.ANALYTICS_STORAGE to FirebaseAnalytics.ConsentStatus.GRANTED,
-            FirebaseAnalytics.ConsentType.AD_PERSONALIZATION to FirebaseAnalytics.ConsentStatus.GRANTED,
-            FirebaseAnalytics.ConsentType.AD_USER_DATA to FirebaseAnalytics.ConsentStatus.GRANTED,
+            FirebaseAnalytics.ConsentType.AD_STORAGE to FirebaseAnalytics.ConsentStatus.DENIED,
+            FirebaseAnalytics.ConsentType.ANALYTICS_STORAGE to FirebaseAnalytics.ConsentStatus.DENIED,
+            FirebaseAnalytics.ConsentType.AD_PERSONALIZATION to FirebaseAnalytics.ConsentStatus.DENIED,
+            FirebaseAnalytics.ConsentType.AD_USER_DATA to FirebaseAnalytics.ConsentStatus.DENIED,
         )
+
         val consentMapping = mapOf(
             0 to FirebaseAnalytics.ConsentType.AD_STORAGE,
             1 to FirebaseAnalytics.ConsentType.ANALYTICS_STORAGE,
@@ -331,11 +333,11 @@ class MainActivity : AppCompatActivity(), CartHandler {
             }
             .setPositiveButton("Confirm") { _, _ ->
                 Log.d(LOG_TAG, "Consent choice confirmed")
-                val userConsentJson = JSONObject(userConsentMap.toMap()).toString()
-                sp.edit()
-                    .putString(CONSENT_KEY,userConsentJson)
-                    .apply()
                 FirebaseAnalytics.getInstance(this).setConsent(userConsentMap)
+                val stringifiedConsent = ObjectMapper().writeValueAsString(userConsentMap)
+                sp.edit()
+                    .putString(CONSENT_KEY, stringifiedConsent)
+                    .apply()
             }
         val dialog: AlertDialog = builder.create()
         dialog.show()
