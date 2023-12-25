@@ -5,12 +5,99 @@
 
 package com.google.firebaseengage
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.ump.ConsentInformation
+import com.google.android.ump.ConsentRequestParameters
+import com.google.android.ump.UserMessagingPlatform
+import com.google.firebaseengage.MainActivity.Companion.LOG_TAG
+import java.util.concurrent.atomic.AtomicBoolean
 
 class AdsActivity : AppCompatActivity() {
+
+    private var mInterstitialAd: InterstitialAd? = null
+    private lateinit var consentInformation: ConsentInformation
+    private var isMobileAdsInitializeCalled = AtomicBoolean(false)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ads)
+        askAdMobConsentAndLoadAd()
+    }
+
+    private fun askAdMobConsentAndLoadAd() {
+        // Set tag for under age of consent. false means users are not under age
+        // of consent.
+        val params = ConsentRequestParameters
+            .Builder()
+            .setTagForUnderAgeOfConsent(false)
+            .build()
+        consentInformation = UserMessagingPlatform.getConsentInformation(this)
+        consentInformation.requestConsentInfoUpdate(
+            this,
+            params,
+            {
+                UserMessagingPlatform.loadAndShowConsentFormIfRequired(
+                    this@AdsActivity
+                ) { loadAndShowError ->
+                    // Consent gathering failed.
+                    if (loadAndShowError != null) {
+                        Log.w(
+                            LOG_TAG, String.format(
+                                "%s: %s",
+                                loadAndShowError.errorCode,
+                                loadAndShowError.message
+                            )
+                        )
+                    }
+                    // Consent has been gathered.
+                    if (consentInformation.canRequestAds()) {
+                        initializeMobileAdsSdk()
+                        loadAd()
+                    }
+                }
+            },
+            { requestConsentError ->
+                // Consent gathering failed.
+                Log.w(
+                    LOG_TAG, String.format(
+                        "%s: %s",
+                        requestConsentError.errorCode,
+                        requestConsentError.message
+                    )
+                )
+            })
+    }
+
+    private fun initializeMobileAdsSdk() {
+        if (isMobileAdsInitializeCalled.getAndSet(true)) {
+            return
+        }
+        // Initialize the Google Mobile Ads SDK.
+        MobileAds.initialize(this)
+    }
+
+    private fun loadAd() {
+        var adRequest = AdRequest.Builder().build()
+        //Test ad Unit: ca-app-pub-3940256099942544/1033173712
+        // My Ad Unit: ca-app-pub-6765186714303261/6581109817
+        InterstitialAd.load(this, "ca-app-pub-3940256099942544/1033173712", adRequest, object : InterstitialAdLoadCallback() {
+            override fun onAdFailedToLoad(adError: LoadAdError) {
+                adError.toString().let { Log.d(LOG_TAG, it) }
+                mInterstitialAd = null
+            }
+
+            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                Log.d(LOG_TAG, "Ad was loaded.")
+                mInterstitialAd = interstitialAd
+                mInterstitialAd!!.show(this@AdsActivity)
+            }
+        })
     }
 }

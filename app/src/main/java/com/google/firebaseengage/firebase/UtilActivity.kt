@@ -29,6 +29,7 @@ class UtilActivity : AppCompatActivity() {
     private lateinit var btnConversion: Button
     private lateinit var btnGetToken: Button
     private lateinit var btnGetFid: Button
+    private lateinit var btnDelToken: Button
     private lateinit var btnWelcome: Button
     private lateinit var btnCrash: Button
 
@@ -72,6 +73,14 @@ class UtilActivity : AppCompatActivity() {
         btnGetToken = findViewById<Button?>(R.id.btn_get_token).apply {
             setOnClickListener {
                 getToken()
+            }
+        }
+
+        btnDelToken = findViewById<Button?>(R.id.btn_del_token).apply {
+            setOnClickListener {
+                FirebaseMessaging.getInstance().deleteToken().addOnCompleteListener {
+                    Log.d(LOG_TAG, "FCM Token deleted")
+                }
             }
         }
 

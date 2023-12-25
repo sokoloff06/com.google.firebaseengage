@@ -60,13 +60,23 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_welcome" />
 
     <Button
+        android:id="@+id/btn_del_token"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="Delete FCM Token"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_get_token" />
+
+    <Button
         android:id="@+id/btn_get_fid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Get Firebase Installation ID"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_get_token" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_del_token" />
 
     <Button
         android:id="@+id/btn_welcome"
