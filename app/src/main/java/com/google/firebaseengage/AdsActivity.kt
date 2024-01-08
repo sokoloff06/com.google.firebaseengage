@@ -5,9 +5,14 @@
 
 package com.google.firebaseengage
 
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
@@ -17,21 +22,27 @@ import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
 import com.google.firebaseengage.MainActivity.Companion.LOG_TAG
+import com.google.firebaseengage.databinding.ActivityAdsBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.concurrent.atomic.AtomicBoolean
 
 class AdsActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityAdsBinding
     private var mInterstitialAd: InterstitialAd? = null
     private lateinit var consentInformation: ConsentInformation
     private var isMobileAdsInitializeCalled = AtomicBoolean(false)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_ads)
+        binding = ActivityAdsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         askAdMobConsentAndLoadAd()
     }
 
     private fun askAdMobConsentAndLoadAd() {
+        loadConsentString()
+
         // Set tag for under age of consent. false means users are not under age
         // of consent.
         val params = ConsentRequestParameters
@@ -58,6 +69,7 @@ class AdsActivity : AppCompatActivity() {
                     }
                     // Consent has been gathered.
                     if (consentInformation.canRequestAds()) {
+                        consentInformation.consentStatus
                         initializeMobileAdsSdk()
                         loadAd()
                     }
@@ -97,6 +109,45 @@ class AdsActivity : AppCompatActivity() {
                 Log.d(LOG_TAG, "Ad was loaded.")
                 mInterstitialAd = interstitialAd
                 mInterstitialAd!!.show(this@AdsActivity)
+            }
+        })
+    }
+
+    private fun loadConsentString() {
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val iabKey = "IABTCF_TCString"
+
+        val readTcString = {
+            @Suppress("DEPRECATION")
+            lifecycleScope.launchWhenCreated {
+                val tcString = withContext(Dispatchers.IO) { sharedPrefs.getString(iabKey, "") }
+                Log.d(LOG_TAG, "TCF String: $tcString")
+            }
+        }
+
+        // Init UI with current value
+        readTcString()
+
+        // Observe SharedPref changes
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            if (key == iabKey) {
+                Log.w(LOG_TAG, "IABTCF_TCString changed")
+                readTcString()
+            }
+        }
+
+        sharedPrefs.registerOnSharedPreferenceChangeListener(listener)
+        lifecycle.addObserver(object: DefaultLifecycleObserver {
+            override fun onDestroy(owner: LifecycleOwner) {
+                sharedPrefs.unregisterOnSharedPreferenceChangeListener(listener)
+            }
+
+            override fun onCreate(owner: LifecycleOwner) {
+                suspend {
+                    val tcString = withContext(Dispatchers.IO) { sharedPrefs.getString(iabKey, "") }
+                    Log.d(LOG_TAG, "TCF String: $tcString")
+                }
+                super.onCreate(owner)
             }
         })
     }
