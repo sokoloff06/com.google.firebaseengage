@@ -21,8 +21,12 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.FirebaseAnalytics.ConsentStatus
+import com.google.firebase.analytics.FirebaseAnalytics.ConsentType
 import com.google.firebaseengage.MainActivity.Companion.LOG_TAG
 import com.google.firebaseengage.databinding.ActivityAdsBinding
+import com.iabtcf.decoder.TCString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.concurrent.atomic.AtomicBoolean
@@ -116,12 +120,32 @@ class AdsActivity : AppCompatActivity() {
     private fun loadConsentString() {
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
         val iabKey = "IABTCF_TCString"
-
         val readTcString = {
             @Suppress("DEPRECATION")
             lifecycleScope.launchWhenCreated {
                 val tcString = withContext(Dispatchers.IO) { sharedPrefs.getString(iabKey, "") }
                 Log.d(LOG_TAG, "TCF String: $tcString")
+                if (tcString == "") return@launchWhenCreated
+                /*
+                * Legitimate interest is like opt-out, enabled by default
+                * Consent is like opt-in, disabled by default
+                */
+                val adStorageAllowed = TCString.decode(tcString).purposesConsent.contains(1)
+                // Always false for Google
+                // val googleAllowed = TCString.decode(tcString).allowedVendors.contains(755)
+                // Consent toggle in vendor setting (i.e. Google is not blocked from using consented data at vendor level)
+                val googleConsent = TCString.decode(tcString).vendorConsent.contains(755)
+                // Legitimate interest toggle in vendor setting (i.e. Google is not blocked from their legitimate interest)
+                val googleInterest = TCString.decode(tcString).vendorLegitimateInterest.contains(755)
+                // We are checking if consent for ad_storage was given and that Google as vendor has not been excluded from using consented data
+                val consentStatus = if (adStorageAllowed && googleConsent)
+                    ConsentStatus.GRANTED
+                else
+                    ConsentStatus.DENIED
+                FirebaseAnalytics.getInstance(applicationContext)
+                    .setConsent(
+                        mapOf(ConsentType.AD_STORAGE to consentStatus)
+                    )
             }
         }
 
@@ -137,7 +161,7 @@ class AdsActivity : AppCompatActivity() {
         }
 
         sharedPrefs.registerOnSharedPreferenceChangeListener(listener)
-        lifecycle.addObserver(object: DefaultLifecycleObserver {
+        lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onDestroy(owner: LifecycleOwner) {
                 sharedPrefs.unregisterOnSharedPreferenceChangeListener(listener)
             }
