@@ -65,6 +65,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-config'
     implementation 'com.google.firebase:firebase-crashlytics'
 
+    implementation 'com.appsflyer:af-android-sdk:6.12.5'
+
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-inappmessaging-display'
 

@@ -19,7 +19,6 @@ import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.ump.ConsentInformation
-import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.FirebaseAnalytics.ConsentStatus
@@ -41,54 +40,19 @@ class AdsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAdsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        askAdMobConsentAndLoadAd()
+        checkAdMobConsentAndLoadAd()
     }
 
-    private fun askAdMobConsentAndLoadAd() {
-        loadConsentString()
-
-        // Set tag for under age of consent. false means users are not under age
-        // of consent.
-        val params = ConsentRequestParameters
-            .Builder()
-            .setTagForUnderAgeOfConsent(false)
-            .build()
+    private fun checkAdMobConsentAndLoadAd() {
         consentInformation = UserMessagingPlatform.getConsentInformation(this)
-        consentInformation.requestConsentInfoUpdate(
-            this,
-            params,
-            {
-                UserMessagingPlatform.loadAndShowConsentFormIfRequired(
-                    this@AdsActivity
-                ) { loadAndShowError ->
-                    // Consent gathering failed.
-                    if (loadAndShowError != null) {
-                        Log.w(
-                            LOG_TAG, String.format(
-                                "%s: %s",
-                                loadAndShowError.errorCode,
-                                loadAndShowError.message
-                            )
-                        )
-                    }
-                    // Consent has been gathered.
-                    if (consentInformation.canRequestAds()) {
-                        consentInformation.consentStatus
-                        initializeMobileAdsSdk()
-                        loadAd()
-                    }
-                }
-            },
-            { requestConsentError ->
-                // Consent gathering failed.
-                Log.w(
-                    LOG_TAG, String.format(
-                        "%s: %s",
-                        requestConsentError.errorCode,
-                        requestConsentError.message
-                    )
-                )
-            })
+        if (consentInformation.canRequestAds()) {
+//            var consentStatus = consentInformation.consentStatus
+            initializeMobileAdsSdk()
+            loadAd()
+        } else {
+            Log.d(LOG_TAG, "Consent was not given")
+            //UserMessagingPlatform.loadAndShowConsentFormIfRequired(this, null)
+        }
     }
 
     private fun initializeMobileAdsSdk() {
@@ -117,62 +81,4 @@ class AdsActivity : AppCompatActivity() {
         })
     }
 
-    private fun loadConsentString() {
-        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
-        val iabKey = "IABTCF_TCString"
-        val readTcString = {
-            @Suppress("DEPRECATION")
-            lifecycleScope.launchWhenCreated {
-                val tcString = withContext(Dispatchers.IO) { sharedPrefs.getString(iabKey, "") }
-                Log.d(LOG_TAG, "TCF String: $tcString")
-                if (tcString == "") return@launchWhenCreated
-                /*
-                * Legitimate interest is like opt-out, enabled by default
-                * Consent is like opt-in, disabled by default
-                */
-                val adStorageAllowed = TCString.decode(tcString).purposesConsent.contains(1)
-                // Always false for Google
-                // val googleAllowed = TCString.decode(tcString).allowedVendors.contains(755)
-                // Consent toggle in vendor setting (i.e. Google is not blocked from using consented data at vendor level)
-                val googleConsent = TCString.decode(tcString).vendorConsent.contains(755)
-                // Legitimate interest toggle in vendor setting (i.e. Google is not blocked from their legitimate interest)
-                val googleInterest = TCString.decode(tcString).vendorLegitimateInterest.contains(755)
-                // We are checking if consent for ad_storage was given and that Google as vendor has not been excluded from using consented data
-                val consentStatus = if (adStorageAllowed && googleConsent)
-                    ConsentStatus.GRANTED
-                else
-                    ConsentStatus.DENIED
-                FirebaseAnalytics.getInstance(applicationContext)
-                    .setConsent(
-                        mapOf(ConsentType.AD_STORAGE to consentStatus)
-                    )
-            }
-        }
-
-        // Init UI with current value
-        readTcString()
-
-        // Observe SharedPref changes
-        val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-            if (key == iabKey) {
-                Log.w(LOG_TAG, "IABTCF_TCString changed")
-                readTcString()
-            }
-        }
-
-        sharedPrefs.registerOnSharedPreferenceChangeListener(listener)
-        lifecycle.addObserver(object : DefaultLifecycleObserver {
-            override fun onDestroy(owner: LifecycleOwner) {
-                sharedPrefs.unregisterOnSharedPreferenceChangeListener(listener)
-            }
-
-            override fun onCreate(owner: LifecycleOwner) {
-                suspend {
-                    val tcString = withContext(Dispatchers.IO) { sharedPrefs.getString(iabKey, "") }
-                    Log.d(LOG_TAG, "TCF String: $tcString")
-                }
-                super.onCreate(owner)
-            }
-        })
-    }
 }
