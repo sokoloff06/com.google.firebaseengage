@@ -46,12 +46,13 @@ class AdsActivity : AppCompatActivity() {
     private fun checkAdMobConsentAndLoadAd() {
         consentInformation = UserMessagingPlatform.getConsentInformation(this)
         if (consentInformation.canRequestAds()) {
+            Log.d(LOG_TAG, "consentInfo: user choice was collected")
 //            var consentStatus = consentInformation.consentStatus
             initializeMobileAdsSdk()
             loadAd()
         } else {
-            Log.d(LOG_TAG, "Consent was not given")
-            //UserMessagingPlatform.loadAndShowConsentFormIfRequired(this, null)
+            Log.d(LOG_TAG, "consentInfo: user choice was not collected")
+//            UserMessagingPlatform.loadAndShowConsentFormIfRequired(this, null)
         }
     }
 

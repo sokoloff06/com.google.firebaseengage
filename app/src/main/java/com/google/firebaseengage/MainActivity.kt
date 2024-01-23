@@ -52,7 +52,6 @@ import com.google.firebaseengage.firebase.UtilActivity
 import com.iabtcf.decoder.TCString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.json.JSONObject
 import java.util.UUID
 
 class MainActivity : AppCompatActivity(), CartHandler {
@@ -418,49 +417,49 @@ class MainActivity : AppCompatActivity(), CartHandler {
         }
     }
 
-//    private fun askUserConsent(sp: SharedPreferences) {
-//        // Entries of the map are iterated in the order they were specified.
-//        val userConsentMap = mutableMapOf(
-//            FirebaseAnalytics.ConsentType.AD_STORAGE to FirebaseAnalytics.ConsentStatus.DENIED,
-//            FirebaseAnalytics.ConsentType.ANALYTICS_STORAGE to FirebaseAnalytics.ConsentStatus.DENIED,
-//            FirebaseAnalytics.ConsentType.AD_PERSONALIZATION to FirebaseAnalytics.ConsentStatus.DENIED,
-//            FirebaseAnalytics.ConsentType.AD_USER_DATA to FirebaseAnalytics.ConsentStatus.DENIED,
-//        )
-//
-//        val consentMapping = mapOf(
-//            0 to FirebaseAnalytics.ConsentType.AD_STORAGE,
-//            1 to FirebaseAnalytics.ConsentType.ANALYTICS_STORAGE,
-//            2 to FirebaseAnalytics.ConsentType.AD_PERSONALIZATION,
-//            3 to FirebaseAnalytics.ConsentType.AD_USER_DATA,
-//        )
-//        val userOptions = consentMapping.values.map { value -> value.name }.toTypedArray()
-//        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-//        builder
-//            .setCancelable(false)
-//            .setTitle("Choose consent signals")
-//            .setMultiChoiceItems(
-//                userOptions,
-//                null
-//            ) { _, position, isChecked ->
-//                run {
-//                    val consentType = consentMapping[position]!!
-//                    val selectedStatus: FirebaseAnalytics.ConsentStatus = if (isChecked) {
-//                        FirebaseAnalytics.ConsentStatus.GRANTED
-//                    } else {
-//                        FirebaseAnalytics.ConsentStatus.DENIED
-//                    }
-//                    userConsentMap[consentType] = selectedStatus
-//                }
-//            }
-//            .setPositiveButton("Confirm") { _, _ ->
-//                Log.d(LOG_TAG, "Consent choice confirmed")
-//                FirebaseAnalytics.getInstance(this).setConsent(userConsentMap)
-//                val stringifiedConsent = ObjectMapper().writeValueAsString(userConsentMap)
-//                sp.edit()
-//                    .putString(CONSENT_KEY, stringifiedConsent)
-//                    .apply()
-//            }
-//        val dialog: AlertDialog = builder.create()
-//        dialog.show()
-//    }
+    private fun askUserConsentInHouse(sp: SharedPreferences) {
+        // Entries of the map are iterated in the order they were specified.
+        val userConsentMap = mutableMapOf(
+            FirebaseAnalytics.ConsentType.AD_STORAGE to FirebaseAnalytics.ConsentStatus.DENIED,
+            FirebaseAnalytics.ConsentType.ANALYTICS_STORAGE to FirebaseAnalytics.ConsentStatus.DENIED,
+            FirebaseAnalytics.ConsentType.AD_PERSONALIZATION to FirebaseAnalytics.ConsentStatus.DENIED,
+            FirebaseAnalytics.ConsentType.AD_USER_DATA to FirebaseAnalytics.ConsentStatus.DENIED,
+        )
+
+        val consentMapping = mapOf(
+            0 to FirebaseAnalytics.ConsentType.AD_STORAGE,
+            1 to FirebaseAnalytics.ConsentType.ANALYTICS_STORAGE,
+            2 to FirebaseAnalytics.ConsentType.AD_PERSONALIZATION,
+            3 to FirebaseAnalytics.ConsentType.AD_USER_DATA,
+        )
+        val userOptions = consentMapping.values.map { value -> value.name }.toTypedArray()
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder
+            .setCancelable(false)
+            .setTitle("Choose consent signals")
+            .setMultiChoiceItems(
+                userOptions,
+                null
+            ) { _, position, isChecked ->
+                run {
+                    val consentType = consentMapping[position]!!
+                    val selectedStatus: FirebaseAnalytics.ConsentStatus = if (isChecked) {
+                        FirebaseAnalytics.ConsentStatus.GRANTED
+                    } else {
+                        FirebaseAnalytics.ConsentStatus.DENIED
+                    }
+                    userConsentMap[consentType] = selectedStatus
+                }
+            }
+            .setPositiveButton("Confirm") { _, _ ->
+                Log.d(LOG_TAG, "Consent choice confirmed")
+                FirebaseAnalytics.getInstance(this).setConsent(userConsentMap)
+                val stringifiedConsent = ObjectMapper().writeValueAsString(userConsentMap)
+                sp.edit()
+                    .putString(CONSENT_KEY, stringifiedConsent)
+                    .apply()
+            }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
 }
