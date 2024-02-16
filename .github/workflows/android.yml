@@ -34,7 +34,7 @@ jobs:
 
     - name: Populate secrets props
       env:
-        DATA: ${{ secrets.SECRET_PROPERTIES }}
+        DATA: ${{ secrets.SECRETS_PROPERTIES }}
       run: echo $DATA > /home/runner/work/com.google.firebaseengage/com.google.firebaseengage/secrets.properties
 
     - name: Decode Keystore
