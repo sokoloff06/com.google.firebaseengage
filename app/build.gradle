@@ -9,6 +9,7 @@ plugins {
 android {
     Properties secrets = new Properties()
     secrets.load(project.rootProject.file('secrets.properties').newDataInputStream())
+    print(secrets.getProperty('storeFile'))
 
     signingConfigs {
         debug {
