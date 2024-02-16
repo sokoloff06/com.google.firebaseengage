@@ -7,12 +7,15 @@ plugins {
 }
 
 android {
+    Properties secrets = new Properties()
+    secrets.load(project.rootProject.file('secrets.properties').newDataInputStream())
+
     signingConfigs {
         debug {
-            storeFile file('/Users/sokolovv/Projects/apps/android/sokolovv-keystore')
-            storePassword 'qwe123#'
-            keyAlias 'key0'
-            keyPassword 'qwe123#'
+            storeFile file(secrets.getProperty('storeFile'))
+            storePassword secrets.getProperty('storePassword')
+            keyAlias secrets.getProperty('keyAlias')
+            keyPassword secrets.getProperty('keyPassword')
         }
     }
     compileSdkVersion 33
