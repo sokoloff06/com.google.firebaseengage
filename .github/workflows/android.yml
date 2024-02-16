@@ -20,22 +20,16 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-
     - name: Create google-services
-      run: touch /home/runner/work/com.google.firebaseengage/com.google.firebaseengage/app/google-services.json | base64
-
-    - name: Populate google-services
       env:
         DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
       run: echo $DATA > /home/runner/work/com.google.firebaseengage/com.google.firebaseengage/app/google-services.json
 
-    - name: Populate secrets props
+    - name: Create secrets props
       env:
-        DATA: ${{ secrets.SECRETS_PROPERTIES }}
+        DATA: ${{ secrets.SECRETS_BASE64 }}
       run: |
-        echo $DATA > /home/runner/work/com.google.firebaseengage/com.google.firebaseengage/secrets.properties
-        echo "Test"
-        cat /home/runner/work/com.google.firebaseengage/com.google.firebaseengage/secrets.properties
+        echo $DATA | base64 -di > /home/runner/work/com.google.firebaseengage/com.google.firebaseengage/secrets.properties
       
 
     - name: Decode Keystore
