@@ -10,5 +10,5 @@ Copyright 2021 Google LLC. This solution, including any related sample code or d
 ## Usage
 1. [Register Android App in Firebase Console](https://firebase.google.com/docs/android/setup#create-firebase-project) **or** [rename package name](https://stackoverflow.com/questions/16804093/rename-package-in-android-studio) to match an app existing in the console  
 2. Add `google-services.json` [downloaded from the Firebase Console](https://support.google.com/firebase/answer/7015592?hl=en#android&zippy=%2Cin-this-article)
-3. (OPTIONALLY) Upload remote_config_console.json to quickly reproduce Remote Configuration matching this app
+3. (OPTIONALLY) Upload [remote_config_console.json](app/remote_config_console.json) to quickly reproduce Remote Configuration matching this app
 ![img.png](publish_config_from_file.png)
