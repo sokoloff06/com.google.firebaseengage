@@ -29,9 +29,6 @@ jobs:
         DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
       run: echo $DATA > /home/runner/work/com.google.firebaseengage/com.google.firebaseengage/app/google-services.json
 
-    - name: Create secrets props
-      run: touch /home/runner/work/com.google.firebaseengage/com.google.firebaseengage/secrets.properties | base64
-
     - name: Populate secrets props
       env:
         DATA: ${{ secrets.SECRETS_PROPERTIES }}
