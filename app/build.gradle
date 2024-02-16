@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    Properties secrets = new Properties()
     var fileObject = project.rootProject.file('secrets.properties')
     println("filePath: " + fileObject.absolutePath)
+    println("fileContents: " + fileObject.text)
 
-
+    Properties secrets = new Properties()
     secrets.load(fileObject.newDataInputStream())
 
     println("debug:" + secrets.getProperty('storeFile'))
