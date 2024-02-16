@@ -8,7 +8,12 @@ plugins {
 
 android {
     Properties secrets = new Properties()
-    secrets.load(project.rootProject.file('secrets.properties').newDataInputStream())
+    var fileObject = project.rootProject.file('secrets.properties')
+    println("filePath: " + fileObject.absolutePath)
+
+
+    secrets.load(fileObject.newDataInputStream())
+
     println("debug:" + secrets.getProperty('storeFile'))
     println("debug:" + secrets.getProperty('keyAlias'))
 
