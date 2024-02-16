@@ -36,6 +36,7 @@ jobs:
         echo $DATA > /home/runner/work/com.google.firebaseengage/com.google.firebaseengage/secrets.properties
         echo "Test"
         cat /home/runner/work/com.google.firebaseengage/com.google.firebaseengage/secrets.properties
+      no-redact: true
       
 
     - name: Decode Keystore
