@@ -12,7 +12,7 @@ android {
     secrets.load(fileObject.newDataInputStream())
 
     signingConfigs {
-        debug {
+        release {
             storeFile file(secrets.getProperty('storeFile'))
             storePassword secrets.getProperty('storePassword')
             keyAlias secrets.getProperty('keyAlias')
