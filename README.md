@@ -1,13 +1,8 @@
 [![Lines of Code](https://sonarqube-ybycjvaeoq-zf.a.run.app/api/project_badges/measure?project=Firebase-Engage&metric=ncloc&token=sqb_d15265938b1278ee1dd8909585e916edfa63b243)](https://sonarqube-ybycjvaeoq-zf.a.run.app/dashboard?id=Firebase-Engage)
-
 [![Maintainability Rating](https://sonarqube-ybycjvaeoq-zf.a.run.app/api/project_badges/measure?project=Firebase-Engage&metric=sqale_rating&token=sqb_d15265938b1278ee1dd8909585e916edfa63b243)](https://sonarqube-ybycjvaeoq-zf.a.run.app/dashboard?id=Firebase-Engage)
-
 [![Quality Gate Status](https://sonarqube-ybycjvaeoq-zf.a.run.app/api/project_badges/measure?project=Firebase-Engage&metric=alert_status&token=sqb_d15265938b1278ee1dd8909585e916edfa63b243)](https://sonarqube-ybycjvaeoq-zf.a.run.app/dashboard?id=Firebase-Engage)
-
 [![Reliability Rating](https://sonarqube-ybycjvaeoq-zf.a.run.app/api/project_badges/measure?project=Firebase-Engage&metric=reliability_rating&token=sqb_d15265938b1278ee1dd8909585e916edfa63b243)](https://sonarqube-ybycjvaeoq-zf.a.run.app/dashboard?id=Firebase-Engage)
-
 [![Security Rating](https://sonarqube-ybycjvaeoq-zf.a.run.app/api/project_badges/measure?project=Firebase-Engage&metric=security_rating&token=sqb_d15265938b1278ee1dd8909585e916edfa63b243)](https://sonarqube-ybycjvaeoq-zf.a.run.app/dashboard?id=Firebase-Engage)
-
 [![Technical Debt](https://sonarqube-ybycjvaeoq-zf.a.run.app/api/project_badges/measure?project=Firebase-Engage&metric=sqale_index&token=sqb_d15265938b1278ee1dd8909585e916edfa63b243)](https://sonarqube-ybycjvaeoq-zf.a.run.app/dashboard?id=Firebase-Engage)
 
 # Demo App from Firebase Engage Training
