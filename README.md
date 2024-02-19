@@ -1,9 +1,9 @@
-[![Lines of Code](https://sonarqube-ybycjvaeoq-zf.a.run.app/api/project_badges/measure?project=Firebase-Engage&metric=ncloc&token=sqb_d15265938b1278ee1dd8909585e916edfa63b243)](https://sonarqube-ybycjvaeoq-zf.a.run.app/dashboard?id=Firebase-Engage)
-[![Maintainability Rating](https://sonarqube-ybycjvaeoq-zf.a.run.app/api/project_badges/measure?project=Firebase-Engage&metric=sqale_rating&token=sqb_d15265938b1278ee1dd8909585e916edfa63b243)](https://sonarqube-ybycjvaeoq-zf.a.run.app/dashboard?id=Firebase-Engage)
-[![Quality Gate Status](https://sonarqube-ybycjvaeoq-zf.a.run.app/api/project_badges/measure?project=Firebase-Engage&metric=alert_status&token=sqb_d15265938b1278ee1dd8909585e916edfa63b243)](https://sonarqube-ybycjvaeoq-zf.a.run.app/dashboard?id=Firebase-Engage)
-[![Reliability Rating](https://sonarqube-ybycjvaeoq-zf.a.run.app/api/project_badges/measure?project=Firebase-Engage&metric=reliability_rating&token=sqb_d15265938b1278ee1dd8909585e916edfa63b243)](https://sonarqube-ybycjvaeoq-zf.a.run.app/dashboard?id=Firebase-Engage)
-[![Security Rating](https://sonarqube-ybycjvaeoq-zf.a.run.app/api/project_badges/measure?project=Firebase-Engage&metric=security_rating&token=sqb_d15265938b1278ee1dd8909585e916edfa63b243)](https://sonarqube-ybycjvaeoq-zf.a.run.app/dashboard?id=Firebase-Engage)
-[![Technical Debt](https://sonarqube-ybycjvaeoq-zf.a.run.app/api/project_badges/measure?project=Firebase-Engage&metric=sqale_index&token=sqb_d15265938b1278ee1dd8909585e916edfa63b243)](https://sonarqube-ybycjvaeoq-zf.a.run.app/dashboard?id=Firebase-Engage)
+http://sonar.visokolov.com/api/project_badges/measure?project=sokoloff06_com.google.firebaseengage_dce5994f-6c57-43c8-9b01-529ccfc9a480&metric=ncloc&token=sqb_2acc28f903041ec281867dfc228f6cf66cf83f86
+http://sonar.visokolov.com/api/project_badges/measure?project=sokoloff06_com.google.firebaseengage_dce5994f-6c57-43c8-9b01-529ccfc9a480&metric=sqale_rating&token=sqb_2acc28f903041ec281867dfc228f6cf66cf83f86
+http://sonar.visokolov.com/api/project_badges/measure?project=sokoloff06_com.google.firebaseengage_dce5994f-6c57-43c8-9b01-529ccfc9a480&metric=alert_status&token=sqb_2acc28f903041ec281867dfc228f6cf66cf83f86
+http://sonar.visokolov.com/api/project_badges/measure?project=sokoloff06_com.google.firebaseengage_dce5994f-6c57-43c8-9b01-529ccfc9a480&metric=reliability_rating&token=sqb_2acc28f903041ec281867dfc228f6cf66cf83f86
+http://sonar.visokolov.com/api/project_badges/measure?project=sokoloff06_com.google.firebaseengage_dce5994f-6c57-43c8-9b01-529ccfc9a480&metric=security_rating&token=sqb_2acc28f903041ec281867dfc228f6cf66cf83f86
+http://sonar.visokolov.com/api/project_badges/measure?project=sokoloff06_com.google.firebaseengage_dce5994f-6c57-43c8-9b01-529ccfc9a480&metric=sqale_index&token=sqb_2acc28f903041ec281867dfc228f6cf66cf83f86
 
 # Demo App from Firebase Engage Training
 
