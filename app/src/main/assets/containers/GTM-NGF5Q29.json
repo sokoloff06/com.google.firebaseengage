@@ -1,14 +1,14 @@
 {
 
-  "fingerprint":"NA$0",
+  "fingerprint":"Nw$0",
 
   "resource": {
-    "version":"4",
+    "version":"7",
 
     "macros":[{"function":"__e","instance_name":"Event Name"},{"function":"__md","instance_name":"personalization group","vtp_setDefaultValue":false,"vtp_eventType":"CUSTOM","vtp_key":"group"},{"function":"__e","instance_name":"_event"},{"function":"__ai","instance_name":"App ID"},{"function":"__an","instance_name":"App Name"},{"function":"__av","instance_name":"App Version Code"},{"function":"__avn","instance_name":"App Version Name"}],
-    "tags":[{"function":"__funct","once_per_event":true,"vtp_functionArgument":["list",["map","key","event_name","value",["macro",0]],["map","key","group","value",["macro",1]]],"vtp_classPath":"com.google.firebaseengage.firebase.PersonalizationAssignmentObserver","tag_id":4},{"function":"__fm","once_per_event":true,"vtp_editParamTable":["list",["map","editParamKey","vitaly_param","editParamValue","vitaly_value"]],"vtp_action":"filter","tag_id":6}],
-    "predicates":[{"function":"_cn","arg0":["macro",0],"arg1":"personalization_assignment"},{"function":"_re","arg0":["macro",2],"arg1":".*"}],
-    "rules":[[["if",0],["add",0]],[["if",1],["add",1]]]
+    "tags":[{"function":"__funct","once_per_event":true,"vtp_functionArgument":["list",["map","key","event_name","value",["macro",0]],["map","key","group","value",["macro",1]]],"vtp_classPath":"com.google.firebaseengage.firebase.PersonalizationAssignmentObserver","tag_id":4},{"function":"__fm","once_per_event":true,"vtp_editParamTable":["list",["map","editParamKey","vitaly_param","editParamValue","vitaly_value"]],"vtp_action":"filter","tag_id":6},{"function":"__fm","once_per_event":true,"vtp_editParamTable":["list",["map","editParamKey","vitaly_param","editParamValue","vitaly_value"]],"vtp_action":"filter","tag_id":8},{"function":"__funct","once_per_event":true,"vtp_functionArgument":["list",["map","key","event_name","value",["macro",0]]],"vtp_classPath":"com.google.firebaseengage.firebase.PersonalizationAssignmentObserver","tag_id":9},{"function":"__funct","once_per_event":true,"vtp_functionArgument":["list",["map","key","event_name","value",["macro",0]]],"vtp_classPath":"com.google.firebaseengage.firebase.PersonalizationAssignmentObserver","tag_id":11}],
+    "predicates":[{"function":"_cn","arg0":["macro",0],"arg1":"personalization_assignment"},{"function":"_re","arg0":["macro",2],"arg1":".*"},{"function":"_cn","arg0":["macro",0],"arg1":"screen_view"},{"function":"_cn","arg0":["macro",0],"arg1":"sv"}],
+    "rules":[[["if",0],["add",0]],[["if",1],["add",1]],[["if",2],["add",2,3]],[["if",3],["add",4]]]
   },
   "runtime":
   [

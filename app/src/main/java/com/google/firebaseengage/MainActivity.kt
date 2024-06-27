@@ -106,9 +106,12 @@ class MainActivity : AppCompatActivity(), CartHandler {
                 .apply()
         }
         if (!sp.contains(CONSENT_KEY)) {
-//            askUserConsent(sp)
+//            askUserConsentInHouse(sp)
             askAdMobConsent()
+        } else {
+            Log.d(LOG_TAG, "$CONSENT_KEY key is present in shared prefs")
         }
+        FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(true);
         navDrawer = findViewById(R.id.drawer_layout)
         navigationView = findViewById(R.id.nav_view)
         swipeRefreshLayout = findViewById(R.id.swiperefresh)
@@ -168,6 +171,14 @@ class MainActivity : AppCompatActivity(), CartHandler {
         initAppsFlyer()
     }
 
+
+    private fun logScreenView() {
+        val eventParams = Bundle()
+        eventParams.putString(FirebaseAnalytics.Param.SCREEN_NAME, "AllDeniedTestScreen")
+        eventParams.putString(FirebaseAnalytics.Param.SCREEN_CLASS, "MainActivity")
+        FirebaseAnalytics.getInstance(this).logEvent("onResume", eventParams)
+    }
+
     private fun initAppsFlyer() {
         AppsFlyerLib.getInstance().run {
             setDebugLog(true)
@@ -177,7 +188,7 @@ class MainActivity : AppCompatActivity(), CartHandler {
     }
 
     private fun askAdMobConsent() {
-        monitorConsentString()
+//        monitorConsentString()
         var consentInformation = UserMessagingPlatform.getConsentInformation(this)
         // Set tag for under age of consent. false means users are not under age
         // of consent.
@@ -372,6 +383,7 @@ class MainActivity : AppCompatActivity(), CartHandler {
         }
         FirebaseInAppMessaging.getInstance().addImpressionListener(fiamImpressionListener)
         FirebaseInAppMessaging.getInstance().addDismissListener(fiamDismissLister)
+        logScreenView()
     }
 
     override fun getCart(): Cart {

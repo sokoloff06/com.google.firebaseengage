@@ -23,11 +23,18 @@
         tools:ignore="GoogleAppIndexingWarning"
         android:networkSecurityConfig="@xml/network_security_config">
 
+
+        <!--GA4 temporary disable analytics-->
+<!--        <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />-->
+
+        <!--GA4 temporary disable automatic events-->
+<!--        <meta-data android:name="google_analytics_automatic_screen_reporting_enabled" android:value="false" />-->
+
         <!--GA4 consent mode-->
-        <meta-data android:name="google_analytics_default_allow_ad_storage" android:value="false" />
+<!--        <meta-data android:name="google_analytics_default_allow_ad_storage" android:value="false" />-->
 <!--        <meta-data android:name="google_analytics_default_allow_analytics_storage" android:value="false" />-->
-<!--        <meta-data android:name="google_analytics_default_allow_ad_user_data" android:value="false" />-->
-<!--        <meta-data android:name="google_analytics_default_allow_ad_personalization" android:value="false" />-->
+<!--        <meta-data android:name="google_analytics_default_allow_ad_user_data" android:value="true" />-->
+<!--        <meta-data android:name="google_analytics_default_allow_ad_personalization" android:value="true" />-->
 
         <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
@@ -48,8 +55,22 @@
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter
+                android:autoVerify="true"
+                tools:targetApi="m">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="sokoloff06.github.io"/>
+                <data android:pathPrefix="/fruit/*"/>
+
+                <tools:validation testUrl="https://sokoloff06.github.io/promo" />
             </intent-filter>
         </activity>
         <activity

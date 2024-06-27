@@ -71,13 +71,13 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2"
 
     // Firebase
-    implementation platform('com.google.firebase:firebase-bom:32.7.3')
+    implementation platform('com.google.firebase:firebase-bom:33.0.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-config'
     implementation 'com.google.firebase:firebase-crashlytics'
 
-    implementation 'com.appsflyer:af-android-sdk:6.12.5'
+    implementation 'com.appsflyer:af-android-sdk:6.13.0'
 
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-inappmessaging-display'
