@@ -188,6 +188,11 @@ class MainActivity : AppCompatActivity(), CartHandler {
     }
 
     private fun askAdMobConsent() {
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
+        sharedPrefs.edit().apply {
+            putInt("IABTCF_EnableAdvertiserConsentMode", 1)
+            commit()
+        }
 //        monitorConsentString()
         var consentInformation = UserMessagingPlatform.getConsentInformation(this)
         // Set tag for under age of consent. false means users are not under age
