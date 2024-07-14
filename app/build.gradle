@@ -4,14 +4,6 @@ plugins {
     // Google services Gradle plugin
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
-    id "org.sonarqube" version "4.4.1.3373"
-}
-
-sonar {
-    properties {
-        property "sonar.projectKey", "sokoloff06_com.google.firebaseengage_dce5994f-6c57-43c8-9b01-529ccfc9a480"
-        property "sonar.projectName", "com.google.firebaseengage"
-    }
 }
 
 android {
@@ -27,11 +19,11 @@ android {
             keyPassword secrets.getProperty('keyPassword')
         }
     }
-    compileSdkVersion 33
     defaultConfig {
         applicationId "com.google.firebaseengage"
         minSdkVersion 22
-        targetSdkVersion 33
+        compileSdk 34
+        targetSdkVersion 35
         versionCode 2
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -45,6 +37,10 @@ android {
 
     buildFeatures {
         viewBinding true
+    }
+    compileOptions {
+        sourceCompatibility = 17
+        targetCompatibility = 17
     }
 
     namespace 'com.google.firebaseengage'
