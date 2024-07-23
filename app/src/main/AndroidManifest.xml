@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- Optional : -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
 
     <application
@@ -35,18 +35,26 @@
         <!--        <meta-data android:name="google_analytics_automatic_screen_reporting_enabled" android:value="false" />-->
 
         <!--GA4 consent mode-->
-<!--        <meta-data-->
-<!--            android:name="google_analytics_tcf_data_enabled"-->
-<!--            android:value="true" />-->
-                <meta-data android:name="google_analytics_default_allow_ad_storage" android:value="true" />
-                <meta-data android:name="google_analytics_default_allow_analytics_storage" android:value="true" />
-                <meta-data android:name="google_analytics_default_allow_ad_user_data" android:value="eu_consent_policy" />
-                <meta-data android:name="google_analytics_default_allow_ad_personalization_signals" android:value="eu_consent_policy" />
+        <!--        <meta-data-->
+        <!--            android:name="google_analytics_tcf_data_enabled"-->
+        <!--            android:value="true" />-->
+        <meta-data
+            android:name="google_analytics_default_allow_ad_storage"
+            android:value="true" />
+        <meta-data
+            android:name="google_analytics_default_allow_analytics_storage"
+            android:value="true" />
+        <meta-data
+            android:name="google_analytics_default_allow_ad_user_data"
+            android:value="eu_consent_policy" />
+        <meta-data
+            android:name="google_analytics_default_allow_ad_personalization_signals"
+            android:value="true" />
 
         <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-6765186714303261~4134963779"/>
+            android:value="ca-app-pub-6765186714303261~4134963779" />
 
         <activity
             android:name=".AdsActivity"
@@ -106,11 +114,37 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
-        </activity> <!-- FCM Demo 1: Registering messaging service for messaging event -->
+        </activity>
+
+        <activity
+            android:name="com.google.firebase.analytics.GoogleAnalyticsServerPreviewActivity"
+            android:exported="true"
+            android:noHistory="true">
+            <!--            sGtm PReview Link: https://tagmanager.google.com/sdk_debug?app_id=com.google.firebaseengage&sgtm_preview_key=ZW52LTZ8WlhDWVIxeFFRV2ZQSi1Ec2hEUzVWd3wxOTBkZmFiN2I4MTAzNGNjMjA4NTk%3D&sgtm_debug_enable=1-->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tagmanager.c.com.google.firebaseengage" />
+            </intent-filter>
+        </activity>
+        <!--        Meta-data that enables uploads to sGTM-->
+        <meta-data
+            android:name="google_analytics_sgtm_upload_enabled"
+            android:value="true" />
+
+        <!--        Remove Old Tag Manager Preview activity-->
+        <activity
+            android:name="com.google.android.gms.tagmanager.TagManagerPreviewActivity"
+            tools:node="remove" />
+
+        <!-- FCM Demo 1: Registering messaging service for messaging event -->
         <service
-            android:foregroundServiceType="dataSync"
             android:name=".firebase.MyFirebaseMessagingService"
-            android:exported="false">
+            android:exported="false"
+            android:foregroundServiceType="dataSync">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
