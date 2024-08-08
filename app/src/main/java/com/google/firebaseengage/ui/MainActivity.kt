@@ -3,7 +3,7 @@
  * Copyright 2021 Google LLC. This solution, including any related sample code or data, is made available on an “as is,” “as available,” and “with all faults” basis, solely for illustrative purposes, and without warranty or representation of any kind. This solution is experimental, unsupported and provided solely for your convenience. Your use of it is subject to your agreements with Google, as applicable, and may constitute a beta feature as defined under those agreements. To the extent that you make any data available to Google in connection with your use of the solution, you represent and warrant that you have all necessary and appropriate rights, consents and permissions to permit Google to use and process that data. By using any portion of this solution, you acknowledge, assume and accept all risks, known and unknown, associated with its usage, including with respect to your deployment of any portion of this solution in your systems, or usage in connection with your business, if at all.
  */
 
-package com.google.firebaseengage
+package com.google.firebaseengage.ui
 
 
 import android.Manifest
@@ -43,11 +43,12 @@ import com.google.firebase.inappmessaging.display.FirebaseInAppMessagingDisplay
 import com.google.firebase.inappmessaging.model.InAppMessage
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
-import com.google.firebaseengage.cart.CartAdapter
-import com.google.firebaseengage.cart.CartFragment
-import com.google.firebaseengage.cart.CartHandler
-import com.google.firebaseengage.catalog.CatalogFragment
-import com.google.firebaseengage.entities.Cart
+import com.google.firebaseengage.R
+import com.google.firebaseengage.ui.cart.CartAdapter
+import com.google.firebaseengage.ui.cart.CartFragment
+import com.google.firebaseengage.ui.cart.CartHandler
+import com.google.firebaseengage.ui.catalog.CatalogFragment
+import com.google.firebaseengage.data.entities.Cart
 import com.google.firebaseengage.firebase.UtilActivity
 import com.iabtcf.decoder.TCString
 import kotlinx.coroutines.Dispatchers
@@ -100,7 +101,11 @@ class MainActivity : AppCompatActivity(), CartHandler {
         val sp = getSharedPreferences("fruttify_prefs", MODE_PRIVATE)
         if (!sp.contains(FIRST_LAUNCH_KEY)) {
             Log.d(LOG_TAG, "first_launch")
-            FirebaseAnalytics.getInstance(this).setUserId(UUID.randomUUID().toString())
+            FirebaseAnalytics.getInstance(this).apply {
+                setUserId(UUID.randomUUID().toString())
+                setUserProperty("test_property", "true")
+//                setUserProperty(FirebaseAnalytics.UserProperty.ALLOW_AD_PERSONALIZATION_SIGNALS, "true")
+            }
             sp.edit()
                 .putBoolean(FIRST_LAUNCH_KEY, false)
                 .apply()

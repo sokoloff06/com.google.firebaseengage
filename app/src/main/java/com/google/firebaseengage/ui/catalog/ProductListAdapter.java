@@ -3,9 +3,7 @@
  * Copyright 2021 Google LLC. This solution, including any related sample code or data, is made available on an “as is,” “as available,” and “with all faults” basis, solely for illustrative purposes, and without warranty or representation of any kind. This solution is experimental, unsupported and provided solely for your convenience. Your use of it is subject to your agreements with Google, as applicable, and may constitute a beta feature as defined under those agreements. To the extent that you make any data available to Google in connection with your use of the solution, you represent and warrant that you have all necessary and appropriate rights, consents and permissions to permit Google to use and process that data. By using any portion of this solution, you acknowledge, assume and accept all risks, known and unknown, associated with its usage, including with respect to your deployment of any portion of this solution in your systems, or usage in connection with your business, if at all.
  */
 
-package com.google.firebaseengage.catalog;
-
-import static com.google.firebaseengage.catalog.CatalogFragment.KEY_PRICE_TAG_COLOR;
+package com.google.firebaseengage.ui.catalog;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -20,7 +18,7 @@ import android.widget.TextView;
 
 import com.google.firebaseengage.R;
 import com.google.firebaseengage.data.ProductsRepository;
-import com.google.firebaseengage.entities.Product;
+import com.google.firebaseengage.data.entities.Product;
 
 import java.util.List;
 
@@ -89,7 +87,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     public void loadProducts(String priceColor) {
         this.priceColor = priceColor;
-        Log.d("ENGAGE-DEBUG", "Applied " + KEY_PRICE_TAG_COLOR + "=" + priceColor + " from Remote Config (for soon-to-happen ViewHolder rendering)");
+        Log.d("ENGAGE-DEBUG", "Applied " + CatalogFragment.KEY_PRICE_TAG_COLOR + "=" + priceColor + " from Remote Config (for soon-to-happen ViewHolder rendering)");
         List<Product> products = repository.getProducts();
         productSortedListByName.addAll(products);
         notifyDataSetChanged();

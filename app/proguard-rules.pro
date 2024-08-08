@@ -16,4 +16,4 @@
 #   public *;
 #}
 
--keep class com.google.firebaseengage.entities.Product
+-keep class com.google.firebaseengage.data.entities.Product

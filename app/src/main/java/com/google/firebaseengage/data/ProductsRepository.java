@@ -5,7 +5,7 @@
 
 package com.google.firebaseengage.data;
 
-import com.google.firebaseengage.entities.Product;
+import com.google.firebaseengage.data.entities.Product;
 
 import java.sql.Timestamp;
 import java.util.List;

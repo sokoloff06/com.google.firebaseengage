@@ -52,7 +52,7 @@ repositories {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation 'com.google.android.gms:play-services-maps:19.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.0-alpha04'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
@@ -73,7 +73,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-config'
     implementation 'com.google.firebase:firebase-crashlytics'
 
-    implementation 'com.appsflyer:af-android-sdk:6.13.0'
+    implementation 'com.appsflyer:af-android-sdk:6.14.0'
 
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-inappmessaging-display'
@@ -85,7 +85,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads:22.6.0'
 
     // User Messaging Platform (for consent)
-    implementation("com.google.android.ump:user-messaging-platform:2.2.0")
+    implementation("com.google.android.ump:user-messaging-platform:3.0.0")
     // IAB TCF Decoder
     implementation("com.iabtcf:iabtcf-decoder:2.0.10")
 

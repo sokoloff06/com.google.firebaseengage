@@ -16,8 +16,8 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.inappmessaging.FirebaseInAppMessaging
 import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebaseengage.MainActivity
-import com.google.firebaseengage.MainActivity.Companion.LOG_TAG
+import com.google.firebaseengage.ui.MainActivity
+import com.google.firebaseengage.ui.MainActivity.Companion.LOG_TAG
 import com.google.firebaseengage.R
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors

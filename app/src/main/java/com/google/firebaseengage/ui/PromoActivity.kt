@@ -4,15 +4,14 @@
  */
 
 @file:JvmName("PromoActivity")
-package com.google.firebaseengage
+package com.google.firebaseengage.ui
 
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
-import com.google.firebase.ktx.Firebase
+import com.google.firebaseengage.R
 
 class PromoActivity : AppCompatActivity() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics

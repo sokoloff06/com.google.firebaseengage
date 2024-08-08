@@ -5,7 +5,7 @@
 
 package com.google.firebaseengage.firebase;
 
-import static com.google.firebaseengage.MainActivity.LOG_TAG;
+import static com.google.firebaseengage.ui.MainActivity.LOG_TAG;
 
 import android.util.Log;
 

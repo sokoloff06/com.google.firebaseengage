@@ -11,8 +11,8 @@ import android.util.Log;
 
 import com.google.firebaseengage.api.ProductsApi;
 import com.google.firebaseengage.data.ProductsRepository;
-import com.google.firebaseengage.entities.Product;
-import com.google.firebaseengage.catalog.ProductsDisplayer;
+import com.google.firebaseengage.data.entities.Product;
+import com.google.firebaseengage.ui.catalog.ProductsDisplayer;
 
 import java.io.FileOutputStream;
 import java.io.InputStream;

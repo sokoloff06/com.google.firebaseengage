@@ -12,7 +12,7 @@ import android.util.Log;
 
 import com.google.firebaseengage.data.ProductsContract.ProductsEntries;
 import com.google.firebaseengage.data.ProductsContract.TimestampEntries;
-import com.google.firebaseengage.entities.Product;
+import com.google.firebaseengage.data.entities.Product;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;

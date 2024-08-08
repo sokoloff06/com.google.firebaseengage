@@ -5,7 +5,7 @@
 
 package com.google.firebaseengage;
 
-import static com.google.firebaseengage.MainActivity.LOG_TAG;
+import static com.google.firebaseengage.ui.MainActivity.LOG_TAG;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import androidx.test.core.app.ApplicationProvider;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
-import com.google.firebaseengage.cart.CartFragment;
+import com.google.firebaseengage.ui.cart.CartFragment;
 import com.google.firebaseengage.firebase.PersonalizationAssignmentObserver;
 
 import org.junit.Before;

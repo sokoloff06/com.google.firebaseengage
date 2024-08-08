@@ -7,7 +7,7 @@ package com.google.firebaseengage.api;
 
 import android.content.Context;
 
-import com.google.firebaseengage.entities.Product;
+import com.google.firebaseengage.data.entities.Product;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

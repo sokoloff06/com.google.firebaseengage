@@ -8,8 +8,7 @@ package com.google.firebaseengage.firebase
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.google.firebaseengage.MainActivity
-import com.google.firebaseengage.MainActivity.Companion.LOG_TAG
+import com.google.firebaseengage.ui.MainActivity.Companion.LOG_TAG
 
 // FCM Demo 2: processing logic
 class MyFirebaseMessagingService : FirebaseMessagingService() {
