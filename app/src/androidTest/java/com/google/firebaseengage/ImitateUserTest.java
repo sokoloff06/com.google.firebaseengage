@@ -54,10 +54,10 @@ public class ImitateUserTest {
         remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults);
         remoteConfig.fetchAndActivate()
                 .addOnCompleteListener(task -> {
-                    Log.d("ENGAGE-DEBUG", "Remote Control fetched and active");
+                    Log.d(LOG_TAG, "Remote Control fetched and active");
                     rcFetchLatch.countDown();
                 })
-                .addOnFailureListener(exception -> Log.d("ENGAGE-DEBUG",
+                .addOnFailureListener(exception -> Log.d(LOG_TAG,
                         "Remote Control FAILED to be fetched: " + exception.getLocalizedMessage()));
 
         rcFetchLatch.await(5000, TimeUnit.MILLISECONDS);

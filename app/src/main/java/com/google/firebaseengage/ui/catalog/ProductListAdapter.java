@@ -5,6 +5,8 @@
 
 package com.google.firebaseengage.ui.catalog;
 
+import static com.google.firebaseengage.ui.MainActivity.LOG_TAG;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -87,7 +89,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     public void loadProducts(String priceColor) {
         this.priceColor = priceColor;
-        Log.d("ENGAGE-DEBUG", "Applied " + CatalogFragment.KEY_PRICE_TAG_COLOR + "=" + priceColor + " from Remote Config (for soon-to-happen ViewHolder rendering)");
+        Log.d(LOG_TAG, "Applied " + CatalogFragment.KEY_PRICE_TAG_COLOR + "=" + priceColor + " from Remote Config (for soon-to-happen ViewHolder rendering)");
         List<Product> products = repository.getProducts();
         productSortedListByName.addAll(products);
         notifyDataSetChanged();

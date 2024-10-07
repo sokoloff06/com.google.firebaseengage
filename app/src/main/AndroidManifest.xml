@@ -38,7 +38,7 @@
         <!--GA4 consent mode-->
         <!--        <meta-data-->
         <!--            android:name="google_analytics_tcf_data_enabled"-->
-        <!--            android:value="true" />-->
+        <!--            android:value="false" />-->
         <meta-data
             android:name="google_analytics_default_allow_ad_storage"
             android:value="true" />
@@ -47,7 +47,7 @@
             android:value="true" />
         <meta-data
             android:name="google_analytics_default_allow_ad_user_data"
-            android:value="eu_consent_policy" />
+            android:value="true" />
         <meta-data
             android:name="google_analytics_default_allow_ad_personalization_signals"
             android:value="true" />
