@@ -1,10 +1,3 @@
-[![Lines of Code](http://sonar.visokolov.com/api/project_badges/measure?project=sokoloff06_com.google.firebaseengage_dce5994f-6c57-43c8-9b01-529ccfc9a480&metric=ncloc&token=sqb_2acc28f903041ec281867dfc228f6cf66cf83f86)](http://sonar.visokolov.com/dashboard?id=sokoloff06_com.google.firebaseengage_dce5994f-6c57-43c8-9b01-529ccfc9a480)
-[![Maintainability Rating](http://sonar.visokolov.com/api/project_badges/measure?project=sokoloff06_com.google.firebaseengage_dce5994f-6c57-43c8-9b01-529ccfc9a480&metric=sqale_rating&token=sqb_2acc28f903041ec281867dfc228f6cf66cf83f86)](http://sonar.visokolov.com/dashboard?id=sokoloff06_com.google.firebaseengage_dce5994f-6c57-43c8-9b01-529ccfc9a480)
-[![Quality Gate Status](http://sonar.visokolov.com/api/project_badges/measure?project=sokoloff06_com.google.firebaseengage_dce5994f-6c57-43c8-9b01-529ccfc9a480&metric=alert_status&token=sqb_2acc28f903041ec281867dfc228f6cf66cf83f86)](http://sonar.visokolov.com/dashboard?id=sokoloff06_com.google.firebaseengage_dce5994f-6c57-43c8-9b01-529ccfc9a480)
-[![Reliability Rating](http://sonar.visokolov.com/api/project_badges/measure?project=sokoloff06_com.google.firebaseengage_dce5994f-6c57-43c8-9b01-529ccfc9a480&metric=reliability_rating&token=sqb_2acc28f903041ec281867dfc228f6cf66cf83f86)](http://sonar.visokolov.com/dashboard?id=sokoloff06_com.google.firebaseengage_dce5994f-6c57-43c8-9b01-529ccfc9a480)
-[![Security Rating](http://sonar.visokolov.com/api/project_badges/measure?project=sokoloff06_com.google.firebaseengage_dce5994f-6c57-43c8-9b01-529ccfc9a480&metric=security_rating&token=sqb_2acc28f903041ec281867dfc228f6cf66cf83f86)](http://sonar.visokolov.com/dashboard?id=sokoloff06_com.google.firebaseengage_dce5994f-6c57-43c8-9b01-529ccfc9a480)
-[![Technical Debt](http://sonar.visokolov.com/api/project_badges/measure?project=sokoloff06_com.google.firebaseengage_dce5994f-6c57-43c8-9b01-529ccfc9a480&metric=sqale_index&token=sqb_2acc28f903041ec281867dfc228f6cf66cf83f86)](http://sonar.visokolov.com/dashboard?id=sokoloff06_com.google.firebaseengage_dce5994f-6c57-43c8-9b01-529ccfc9a480)
-
 # Demo App from Firebase Engage Training
 
 ## Copyright

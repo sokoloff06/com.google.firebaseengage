@@ -44,12 +44,12 @@ import com.google.firebase.inappmessaging.model.InAppMessage
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.firebaseengage.R
+import com.google.firebaseengage.data.entities.Cart
+import com.google.firebaseengage.firebase.UtilActivity
 import com.google.firebaseengage.ui.cart.CartAdapter
 import com.google.firebaseengage.ui.cart.CartFragment
 import com.google.firebaseengage.ui.cart.CartHandler
 import com.google.firebaseengage.ui.catalog.CatalogFragment
-import com.google.firebaseengage.data.entities.Cart
-import com.google.firebaseengage.firebase.UtilActivity
 import com.iabtcf.decoder.TCString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity(), CartHandler {
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     companion object {
-        const val LOG_TAG = "ENGAGE-DEBUG"
+        const val LOG_TAG = "firebaseengage"
         const val FIRST_LAUNCH_KEY = "is_first_launch"
         const val CONSENT_KEY = "consent_values"
 
@@ -320,16 +320,16 @@ class MainActivity : AppCompatActivity(), CartHandler {
         // RC Demo 3: Fetching Config
         remoteConfig.fetchAndActivate().addOnCompleteListener {
             if (it.result) {
-                Log.d("ENGAGE-DEBUG", "Remote Config fetched and active")
+                Log.d(LOG_TAG, "Remote Config fetched and active")
             } else {
                 Log.w(
-                    "ENGAGE-DEBUG", "WARNING: minFetchInterval didn't pass or " + "Config didn't change. Using cached values!"
+                    LOG_TAG, "WARNING: minFetchInterval didn't pass or " + "Config didn't change. Using cached values!"
                 )
             }
             onRemoteConfigComplete()
         }.addOnFailureListener { exception ->
             Log.d(
-                "ENGAGE-DEBUG", "Remote Control FAILED to be fetched: $exception.localizedMessage"
+                LOG_TAG, "Remote Control FAILED to be fetched: $exception.localizedMessage"
             )
             onRemoteConfigComplete()
         }
