@@ -75,7 +75,7 @@ public class CartFragment extends Fragment {
         sendPurchaseButton = rootView.findViewById(R.id.sendPurchaseButton);
         String color = FirebaseRemoteConfig.getInstance().getString(KEY_PURCHASE_BTN_COLOR);
         sendPurchaseButton.setBackgroundColor(Color.parseColor(color));
-        Log.d("ENGAGE-DEBUG", "Applied btn_buy_color of " + color + " from Remote Config");
+        Log.d(LOG_TAG, "Applied btn_buy_color of " + color + " from Remote Config");
         sendPurchaseButton.setOnClickListener(view -> {
             Context ctx = getContext();
             if (ctx != null) {
@@ -96,6 +96,6 @@ public class CartFragment extends Fragment {
     public void onSwipeUpdate() {
         String color = FirebaseRemoteConfig.getInstance().getString(KEY_PURCHASE_BTN_COLOR);
         sendPurchaseButton.setBackgroundColor(Color.parseColor(color));
-        Log.d("ENGAGE-DEBUG", "Applied btn_buy_color of " + color + " from Remote Config");
+        Log.d(LOG_TAG, "Applied btn_buy_color of " + color + " from Remote Config");
     }
 }
