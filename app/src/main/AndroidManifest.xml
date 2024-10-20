@@ -29,8 +29,8 @@
             tools:replace="android:resource" />
 
 
-        <!--GA4 temporary disable analytics-->
-        <!--        <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />-->
+<!--        GA4 temporary disable analytics-->
+<!--                <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />-->
 
         <!--GA4 temporary disable automatic events-->
         <!--        <meta-data android:name="google_analytics_automatic_screen_reporting_enabled" android:value="false" />-->
@@ -39,18 +39,18 @@
         <!--        <meta-data-->
         <!--            android:name="google_analytics_tcf_data_enabled"-->
         <!--            android:value="false" />-->
-        <meta-data
-            android:name="google_analytics_default_allow_ad_storage"
-            android:value="true" />
-        <meta-data
-            android:name="google_analytics_default_allow_analytics_storage"
-            android:value="true" />
-        <meta-data
-            android:name="google_analytics_default_allow_ad_user_data"
-            android:value="true" />
-        <meta-data
-            android:name="google_analytics_default_allow_ad_personalization_signals"
-            android:value="true" />
+<!--        <meta-data-->
+<!--            android:name="google_analytics_default_allow_ad_storage"-->
+<!--            android:value="true" />-->
+<!--        <meta-data-->
+<!--            android:name="google_analytics_default_allow_analytics_storage"-->
+<!--            android:value="true" />-->
+<!--        <meta-data-->
+<!--            android:name="google_analytics_default_allow_ad_user_data"-->
+<!--            android:value="true" />-->
+<!--        <meta-data-->
+<!--            android:name="google_analytics_default_allow_ad_personalization_signals"-->
+<!--            android:value="true" />-->
 
         <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data

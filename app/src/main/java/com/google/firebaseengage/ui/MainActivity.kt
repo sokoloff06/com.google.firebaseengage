@@ -116,7 +116,6 @@ class MainActivity : AppCompatActivity(), CartHandler {
         } else {
             Log.d(LOG_TAG, "$CONSENT_KEY key is present in shared prefs")
         }
-        FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(true);
         navDrawer = findViewById(R.id.drawer_layout)
         navigationView = findViewById(R.id.nav_view)
         swipeRefreshLayout = findViewById(R.id.swiperefresh)
@@ -192,7 +191,32 @@ class MainActivity : AppCompatActivity(), CartHandler {
         }
     }
 
+    fun setAllConsent(granted: Boolean) {
+        if (granted) {
+            FirebaseAnalytics.getInstance(this).setConsent(
+                mapOf(
+                    FirebaseAnalytics.ConsentType.AD_STORAGE to FirebaseAnalytics.ConsentStatus.GRANTED,
+                    FirebaseAnalytics.ConsentType.ANALYTICS_STORAGE to FirebaseAnalytics.ConsentStatus.GRANTED,
+                    FirebaseAnalytics.ConsentType.AD_PERSONALIZATION to FirebaseAnalytics.ConsentStatus.GRANTED,
+                    FirebaseAnalytics.ConsentType.AD_USER_DATA to FirebaseAnalytics.ConsentStatus.GRANTED,
+                )
+            )
+        } else {
+            FirebaseAnalytics.getInstance(this).setConsent(
+                mapOf(
+                    FirebaseAnalytics.ConsentType.AD_STORAGE to FirebaseAnalytics.ConsentStatus.DENIED,
+                    FirebaseAnalytics.ConsentType.ANALYTICS_STORAGE to FirebaseAnalytics.ConsentStatus.DENIED,
+                    FirebaseAnalytics.ConsentType.AD_PERSONALIZATION to FirebaseAnalytics.ConsentStatus.DENIED,
+                    FirebaseAnalytics.ConsentType.AD_USER_DATA to FirebaseAnalytics.ConsentStatus.DENIED,
+                )
+            )
+        }
+        FirebaseAnalytics.getInstance(this).logEvent("set_all_consent_api_$granted", null)
+    }
+
     private fun askAdMobConsent() {
+        FirebaseAnalytics.getInstance(this).logEvent("consent_unspecified", null)
+//        setAllConsent(false)
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
         sharedPrefs.edit().apply {
             putInt("IABTCF_EnableAdvertiserConsentMode", 1)
@@ -430,6 +454,7 @@ class MainActivity : AppCompatActivity(), CartHandler {
 //            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
 //                // TODO: display an educational UI explaining to the user the features that will be enabled
 //                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
+//                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
 //                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
 //                //       If the user selects "No thanks," allow the user to continue without notifications.
             } else {

@@ -12,13 +12,14 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.ump.UserMessagingPlatform
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.inappmessaging.FirebaseInAppMessaging
 import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebaseengage.R
 import com.google.firebaseengage.ui.MainActivity
 import com.google.firebaseengage.ui.MainActivity.Companion.LOG_TAG
-import com.google.firebaseengage.R
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -32,6 +33,7 @@ class UtilActivity : AppCompatActivity() {
     private lateinit var btnDelToken: Button
     private lateinit var btnWelcome: Button
     private lateinit var btnCrash: Button
+    private lateinit var btnConsent: Button
 
     companion object {
         val threadPool: ExecutorService = Executors.newCachedThreadPool()
@@ -98,6 +100,14 @@ class UtilActivity : AppCompatActivity() {
         btnCrash = findViewById<Button?>(R.id.btn_crash).apply {
             setOnClickListener {
                 throw java.lang.RuntimeException("Crashlytics Test")
+            }
+        }
+
+        btnConsent = findViewById<Button?>(R.id.btn_consent).apply {
+            setOnClickListener {
+                UserMessagingPlatform.showPrivacyOptionsForm(this@UtilActivity) {
+                    Log.d(LOG_TAG, "UMP Consent Form dismissed")
+                }
             }
         }
     }
