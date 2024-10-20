@@ -7,18 +7,18 @@ plugins {
 }
 
 android {
-    var fileObject = project.rootProject.file('secrets.properties')
-    Properties secrets = new Properties()
-    secrets.load(fileObject.newDataInputStream())
-
-    signingConfigs {
-        release {
-            storeFile file(secrets.getProperty('storeFile'))
-            storePassword secrets.getProperty('storePassword')
-            keyAlias secrets.getProperty('keyAlias')
-            keyPassword secrets.getProperty('keyPassword')
-        }
-    }
+//    var fileObject = project.rootProject.file('secrets.properties')
+//    Properties secrets = new Properties()
+//    secrets.load(fileObject.newDataInputStream())
+//
+//    signingConfigs {
+//        release {
+//            storeFile file(secrets.getProperty('storeFile'))
+//            storePassword secrets.getProperty('storePassword')
+//            keyAlias secrets.getProperty('keyAlias')
+//            keyPassword secrets.getProperty('keyPassword')
+//        }
+//    }
     defaultConfig {
         applicationId "com.google.firebaseengage"
         minSdkVersion 22
