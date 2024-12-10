@@ -187,7 +187,7 @@ class MainActivity : AppCompatActivity(), CartHandler {
         AppsFlyerLib.getInstance().run {
             setDebugLog(true)
             init("LadcyeEpUmDJAMWDYEsZfH", null, this@MainActivity)
-            start(this@MainActivity)
+            enableTCFDataCollection(true)
         }
     }
 
@@ -234,10 +234,13 @@ class MainActivity : AppCompatActivity(), CartHandler {
         consentInformation.requestConsentInfoUpdate(
             this,
             params,
+            // Success Listener
             {
                 UserMessagingPlatform.loadAndShowConsentFormIfRequired(
                     this
-                ) { loadAndShowError ->
+                )
+                // On consent dismissed listener
+                { loadAndShowError ->
                     // Consent gathering failed.
                     if (loadAndShowError != null) {
                         Log.w(
@@ -248,8 +251,12 @@ class MainActivity : AppCompatActivity(), CartHandler {
                             )
                         )
                     }
+                    // Re-enable Firebase and AppsFlyer SDK
+                    FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(true)
+                    AppsFlyerLib.getInstance().start(this)
                 }
             },
+            // Fail listener
             { requestConsentError ->
                 // Consent gathering failed.
                 Log.w(

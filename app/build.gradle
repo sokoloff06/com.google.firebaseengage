@@ -67,7 +67,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2"
 
     // Firebase
-    implementation platform('com.google.firebase:firebase-bom:33.1.2')
+    implementation platform('com.google.firebase:firebase-bom:33.6.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-config'
@@ -79,13 +79,13 @@ dependencies {
     implementation 'com.google.firebase:firebase-inappmessaging-display'
 
     // Google Tag Manager
-    implementation 'com.google.android.gms:play-services-tagmanager:18.0.2'
+    implementation 'com.google.android.gms:play-services-tagmanager:18.1.1'
 
     // Google AdMob
     implementation 'com.google.android.gms:play-services-ads:22.6.0'
 
     // User Messaging Platform (for consent)
-    implementation("com.google.android.ump:user-messaging-platform:3.0.0")
+    implementation("com.google.android.ump:user-messaging-platform:3.1.0")
     // IAB TCF Decoder
     implementation("com.iabtcf:iabtcf-decoder:2.0.10")
 
