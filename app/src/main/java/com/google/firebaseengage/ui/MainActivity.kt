@@ -56,9 +56,11 @@ import com.google.firebaseengage.ui.catalog.ProductDetailsActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+import com.google.firebaseengage.data.entities.CartManager
+
 class MainActivity : AppCompatActivity(), CartHandler {
     private lateinit var navigationView: NavigationView
-    private var cart = Cart()
+    private var cart = CartManager.getInstance()
     private var cartAdapter = CartAdapter(this)
     private lateinit var navDrawer: DrawerLayout
     private lateinit var viewPager: ViewPager
@@ -403,7 +405,6 @@ class MainActivity : AppCompatActivity(), CartHandler {
         sumTextView?.let {
             it.text = cart.sum.toString() + "€"
         }
-        cartAdapter.loadData()
     }
 
     override fun getCartAdapter(): CartAdapter {

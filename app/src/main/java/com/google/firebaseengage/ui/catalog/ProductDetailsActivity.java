@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebaseengage.R;
 import com.google.firebaseengage.data.entities.Product;
 
+import com.google.firebaseengage.data.entities.CartManager;
+
 /**
  * Activity that displays details for a specific product.
  * Expects a Product object passed via Intent extra EXTRA_PRODUCT.
@@ -59,7 +61,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         priceTextView.setText(product.getPrice() + "€");
 
         addToCartButton.setOnClickListener(v -> {
-            // Placeholder logic for adding to cart
+            CartManager.getInstance().add(product);
             Toast.makeText(this, product.getName() + " added to cart", Toast.LENGTH_SHORT).show();
         });
     }

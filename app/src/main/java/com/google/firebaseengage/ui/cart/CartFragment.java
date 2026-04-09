@@ -65,6 +65,7 @@ public class CartFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_cart, container, false);
         sumTextView = rootView.findViewById(R.id.sum_text_view);
+        sumTextView.setText(cart.getSum() + "€");
         cartRecyclerView = rootView.findViewById(R.id.rv_cart);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         cartRecyclerView.setLayoutManager(layoutManager);

@@ -170,7 +170,8 @@ public class CatalogFragment extends Fragment implements ProductsDisplayer {
 
     @Override
     public void onAddToCartClicked(int position) {
-        cart.add(productListAdapter.getProduct(position));
+        Product product = productListAdapter.getProduct(position);
+        cart.add(product);
         cartHandler.getCartAdapter().loadData();
         Toast.makeText(getContext(), "Added to cart", Toast.LENGTH_SHORT).show();
     }
