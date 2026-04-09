@@ -16,9 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,7 +40,7 @@ public class CartFragment extends Fragment {
     CartAdapter cartAdapter;
     CartHandler cartHandler;
     Cart cart;
-    Button sendPurchaseButton;
+    Button purchaseButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,22 +69,17 @@ public class CartFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         cartRecyclerView.setLayoutManager(layoutManager);
         cartRecyclerView.setAdapter(cartAdapter);
-        sendPurchaseButton = rootView.findViewById(R.id.sendPurchaseButton);
+        purchaseButton = rootView.findViewById(R.id.sendPurchaseButton);
         String color = FirebaseRemoteConfig.getInstance().getString(KEY_PURCHASE_BTN_COLOR);
-        sendPurchaseButton.setBackgroundColor(Color.parseColor(color));
-        Log.d(LOG_TAG, "Applied btn_buy_color of " + color + " from Remote Config");
-        sendPurchaseButton.setOnClickListener(view -> {
-            Context ctx = getContext();
-            if (ctx != null) {
-                Log.d(LOG_TAG, "Logging event (removed)");
-            }
+        purchaseButton.setBackgroundColor(Color.parseColor(color));
+        purchaseButton.setOnClickListener(view -> {
         });
         return rootView;
     }
 
     public void onSwipeUpdate() {
         String color = FirebaseRemoteConfig.getInstance().getString(KEY_PURCHASE_BTN_COLOR);
-        sendPurchaseButton.setBackgroundColor(Color.parseColor(color));
+        purchaseButton.setBackgroundColor(Color.parseColor(color));
         Log.d(LOG_TAG, "Applied btn_buy_color of " + color + " from Remote Config");
     }
 }
