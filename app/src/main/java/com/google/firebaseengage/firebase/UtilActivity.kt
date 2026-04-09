@@ -13,7 +13,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.ump.UserMessagingPlatform
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.inappmessaging.FirebaseInAppMessaging
 import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
@@ -25,7 +24,6 @@ import java.util.concurrent.Executors
 
 
 class UtilActivity : AppCompatActivity() {
-    lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private lateinit var btnConversion: Button
     private lateinit var btnGetToken: Button
@@ -44,35 +42,9 @@ class UtilActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_util)
         Log.d(LOG_TAG, "onCreate: $intent")
-        firebaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
         btnConversion = findViewById<Button>(R.id.btn_conversion).apply {
             setOnClickListener {
-                // Single item description
-                val purchaseItem = Bundle()
-                purchaseItem.putString(FirebaseAnalytics.Param.ITEM_ID, "productId")
-                purchaseItem.putString(FirebaseAnalytics.Param.ITEM_NAME, "productDisplayName")
-                purchaseItem.putString(FirebaseAnalytics.Param.QUANTITY, "2")
-                purchaseItem.putDouble(FirebaseAnalytics.Param.PRICE, 5.0)
-                purchaseItem.putString(FirebaseAnalytics.Param.ITEM_VARIANT, "color_blue")
-
-                // Adding single item to the array of items
-                val purchaseParams = Bundle()
-                purchaseParams.putParcelableArray(
-                    FirebaseAnalytics.Param.ITEMS,
-                    arrayOf(purchaseItem)
-                )
-//                purchaseParams.putString(FirebaseAnalytics.Param.EVENT_ID, "USD")
-
-
-                // Whole purchase description
-                purchaseParams.putString(FirebaseAnalytics.Param.CURRENCY, "USD")
-                purchaseParams.putString(FirebaseAnalytics.Param.AFFILIATION, "UtilActivity")
-                purchaseParams.putString(FirebaseAnalytics.Param.TRANSACTION_ID, "T12345")
-                purchaseParams.putDouble(FirebaseAnalytics.Param.VALUE, 10.0)
-                purchaseParams.putDouble(FirebaseAnalytics.Param.SHIPPING, 5.0)
-
-                val firebaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
-                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.PURCHASE, purchaseParams)
+                // Firebase Analytics logging removed
             }
         }
         btnGetToken = findViewById<Button?>(R.id.btn_get_token).apply {
@@ -96,7 +68,7 @@ class UtilActivity : AppCompatActivity() {
         }
         btnWelcome = findViewById<Button?>(R.id.btn_welcome).apply {
             setOnClickListener {
-                firebaseAnalytics.logEvent("show_welcome", null)
+                // Firebase Analytics logging removed
             }
         }
 
@@ -125,18 +97,6 @@ class UtilActivity : AppCompatActivity() {
 
     private fun getFid() {
         threadPool.submit {
-            // Same as FIAM Installation ID
-            firebaseAnalytics.firebaseInstanceId.also {
-                Log.d(LOG_TAG, "firebaseInstanceId = $it")
-            }
-
-            firebaseAnalytics.appInstanceId.addOnCompleteListener {
-                Log.d(LOG_TAG, "appInstanceId = ${it.result}")
-            }
-
-            firebaseAnalytics.sessionId.addOnCompleteListener {
-                Log.d(LOG_TAG, "sessionId = ${it.result}")
-            }
             FirebaseInstallations.getInstance().getToken(false).addOnCompleteListener {
                 Log.d(LOG_TAG, "installationAuthToken = ${it.result.token}")
             }

@@ -34,10 +34,6 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-6765186714303261~4134963779" />
 
-        <!-- Value to be added to enable deferred deep links -->
-        <meta-data
-            android:name="google_analytics_deferred_deep_link_enabled"
-            android:value="true" />
 
         <activity
             android:name=".ui.AdsActivity"
@@ -118,31 +114,6 @@
             android:exported="false"
             android:label="WebView" />
 
-        <!-- Preview Activity for GTM -->
-        <activity
-            android:name="com.google.firebase.analytics.GoogleAnalyticsServerPreviewActivity"
-            android:exported="true"
-            android:noHistory="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="tagmanager.sgtm.c.com.google.firebaseengage" />
-                <data android:scheme="tagmanager.c.com.google.firebaseengage" />
-            </intent-filter>
-        </activity>
-
-        <!--        Meta-data that enables uploads to sGTM-->
-        <meta-data
-            android:name="google_analytics_sgtm_upload_enabled"
-            android:value="true" />
-
-        <!--        Remove Old Tag Manager Preview activity-->
-        <activity
-            android:name="com.google.android.gms.tagmanager.TagManagerPreviewActivity"
-            tools:node="remove" />
 
         <!-- FCM Demo 1: Registering messaging service for messaging event -->
         <service

@@ -26,7 +26,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebaseengage.R;
 import com.google.firebaseengage.data.entities.Cart;
@@ -79,15 +78,8 @@ public class CartFragment extends Fragment {
         sendPurchaseButton.setOnClickListener(view -> {
             Context ctx = getContext();
             if (ctx != null) {
-                Bundle eventParams = new Bundle();
-                double sum = cart.getSum();
-                EditText editText = rootView.findViewById(R.id.transaction_id_field);
-                eventParams.putString(FirebaseAnalytics.Param.CURRENCY, "USD");
-                eventParams.putDouble(FirebaseAnalytics.Param.VALUE, sum);
-                eventParams.putString(FirebaseAnalytics.Param.TRANSACTION_ID, editText.getText().toString());
-                Log.d(LOG_TAG, "Logging event");
-                FirebaseAnalytics.getInstance(getContext()).logEvent(FirebaseAnalytics.Event.PURCHASE, eventParams);
-                Toast.makeText(getContext(), eventParams.toString(), Toast.LENGTH_SHORT).show();
+                // Firebase Analytics logging removed
+                Log.d(LOG_TAG, "Logging event (removed)");
             }
         });
         return rootView;

@@ -35,7 +35,6 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.inappmessaging.FirebaseInAppMessaging
 import com.google.firebase.inappmessaging.FirebaseInAppMessagingDismissListener
 import com.google.firebase.inappmessaging.FirebaseInAppMessagingImpressionListener
@@ -54,10 +53,8 @@ import com.google.firebaseengage.ui.cart.CartFragment
 import com.google.firebaseengage.ui.cart.CartHandler
 import com.google.firebaseengage.ui.catalog.CatalogFragment
 import com.google.firebaseengage.ui.catalog.ProductDetailsActivity
-import com.iabtcf.decoder.TCString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.util.UUID
 
 class MainActivity : AppCompatActivity(), CartHandler {
     private lateinit var navigationView: NavigationView
@@ -68,8 +65,6 @@ class MainActivity : AppCompatActivity(), CartHandler {
     private lateinit var remoteConfig: FirebaseRemoteConfig
 
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    private lateinit var deferredDeepLinkPrefs: SharedPreferences
-    private lateinit var deepLinkListener: SharedPreferences.OnSharedPreferenceChangeListener
 
     companion object {
         const val LOG_TAG = "firebaseengage"
@@ -100,12 +95,10 @@ class MainActivity : AppCompatActivity(), CartHandler {
 
     override fun onStart() {
         super.onStart()
-        deferredDeepLinkPrefs.registerOnSharedPreferenceChangeListener(deepLinkListener)
     }
 
     override fun onStop() {
         super.onStop()
-        deferredDeepLinkPrefs.unregisterOnSharedPreferenceChangeListener(deepLinkListener)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -121,11 +114,6 @@ class MainActivity : AppCompatActivity(), CartHandler {
         val sp = getSharedPreferences("fruttify_prefs", MODE_PRIVATE)
         if (!sp.contains(FIRST_LAUNCH_KEY)) {
             Log.d(LOG_TAG, "first_launch")
-            FirebaseAnalytics.getInstance(this).apply {
-                setUserId(UUID.randomUUID().toString())
-                setUserProperty("test_property", "true")
-//                setUserProperty(FirebaseAnalytics.UserProperty.ALLOW_AD_PERSONALIZATION_SIGNALS, "true")
-            }
             sp.edit()
                 .putBoolean(FIRST_LAUNCH_KEY, false)
                 .apply()
@@ -193,25 +181,11 @@ class MainActivity : AppCompatActivity(), CartHandler {
         askNotificationPermission()
         registerFiamListener()
         initAppsFlyer()
-
-        deferredDeepLinkPrefs = getSharedPreferences("google.analytics.deferred.deeplink.prefs", MODE_PRIVATE)
-        deepLinkListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
-            if ("deeplink" == key) {
-                val deeplink = sharedPreferences?.getString(key, null)
-                deeplink?.let {
-                    Toast.makeText(this, "Deferred Deep Link: $it", Toast.LENGTH_LONG).show()
-                    // Optionally handle the deferred deep link here
-                }
-            }
-        }
     }
 
 
     private fun logScreenView() {
-        val eventParams = Bundle()
-        eventParams.putString(FirebaseAnalytics.Param.SCREEN_NAME, "AllDeniedTestScreen")
-        eventParams.putString(FirebaseAnalytics.Param.SCREEN_CLASS, "MainActivity")
-        FirebaseAnalytics.getInstance(this).logEvent("onResume", eventParams)
+        // Firebase Analytics logging removed
     }
 
     private fun initAppsFlyer() {
@@ -223,30 +197,11 @@ class MainActivity : AppCompatActivity(), CartHandler {
     }
 
     fun setAllConsent(granted: Boolean) {
-        if (granted) {
-            FirebaseAnalytics.getInstance(this).setConsent(
-                mapOf(
-                    FirebaseAnalytics.ConsentType.AD_STORAGE to FirebaseAnalytics.ConsentStatus.GRANTED,
-                    FirebaseAnalytics.ConsentType.ANALYTICS_STORAGE to FirebaseAnalytics.ConsentStatus.GRANTED,
-                    FirebaseAnalytics.ConsentType.AD_PERSONALIZATION to FirebaseAnalytics.ConsentStatus.GRANTED,
-                    FirebaseAnalytics.ConsentType.AD_USER_DATA to FirebaseAnalytics.ConsentStatus.GRANTED,
-                )
-            )
-        } else {
-            FirebaseAnalytics.getInstance(this).setConsent(
-                mapOf(
-                    FirebaseAnalytics.ConsentType.AD_STORAGE to FirebaseAnalytics.ConsentStatus.DENIED,
-                    FirebaseAnalytics.ConsentType.ANALYTICS_STORAGE to FirebaseAnalytics.ConsentStatus.DENIED,
-                    FirebaseAnalytics.ConsentType.AD_PERSONALIZATION to FirebaseAnalytics.ConsentStatus.DENIED,
-                    FirebaseAnalytics.ConsentType.AD_USER_DATA to FirebaseAnalytics.ConsentStatus.DENIED,
-                )
-            )
-        }
-        FirebaseAnalytics.getInstance(this).logEvent("set_all_consent_api_$granted", null)
+        // Firebase Analytics consent removed
     }
 
     private fun askAdMobConsent() {
-        FirebaseAnalytics.getInstance(this).logEvent("consent_unspecified", null)
+        // Firebase Analytics logging removed
 //        setAllConsent(false)
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
         sharedPrefs.edit().apply {
@@ -282,8 +237,7 @@ class MainActivity : AppCompatActivity(), CartHandler {
                             )
                         )
                     }
-                    // Re-enable Firebase and AppsFlyer SDK
-                    FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(true)
+                    // Re-enable AppsFlyer SDK
                     AppsFlyerLib.getInstance().start(this)
                 }
             },
@@ -314,22 +268,6 @@ class MainActivity : AppCompatActivity(), CartHandler {
                 * Legitimate interest is like opt-out, enabled by default
                 * Consent is like opt-in, disabled by default
                 */
-                val adStorageAllowed = TCString.decode(tcString!!).purposesConsent.contains(1)
-                // Always false for Google
-                // val googleAllowed = TCString.decode(tcString).allowedVendors.contains(755)
-                // Consent toggle in vendor setting (i.e. Google is not blocked from using consented data at vendor level)
-                val googleConsent = TCString.decode(tcString).vendorConsent.contains(755)
-                // Legitimate interest toggle in vendor setting (i.e. Google is not blocked from their legitimate interest)
-                val googleInterest = TCString.decode(tcString).vendorLegitimateInterest.contains(755)
-                // We are checking if consent for ad_storage was given and that Google as vendor has not been excluded from using consented data
-                val consentStatus = if (adStorageAllowed && googleConsent)
-                    FirebaseAnalytics.ConsentStatus.GRANTED
-                else
-                    FirebaseAnalytics.ConsentStatus.DENIED
-                FirebaseAnalytics.getInstance(applicationContext)
-                    .setConsent(
-                        mapOf(FirebaseAnalytics.ConsentType.AD_STORAGE to consentStatus)
-                    )
             }
         }
 
@@ -547,48 +485,6 @@ class MainActivity : AppCompatActivity(), CartHandler {
     }
 
     private fun askUserConsentInHouse(sp: SharedPreferences) {
-        // Entries of the map are iterated in the order they were specified.
-        val userConsentMap = mutableMapOf(
-            FirebaseAnalytics.ConsentType.AD_STORAGE to FirebaseAnalytics.ConsentStatus.DENIED,
-            FirebaseAnalytics.ConsentType.ANALYTICS_STORAGE to FirebaseAnalytics.ConsentStatus.DENIED,
-            FirebaseAnalytics.ConsentType.AD_PERSONALIZATION to FirebaseAnalytics.ConsentStatus.DENIED,
-            FirebaseAnalytics.ConsentType.AD_USER_DATA to FirebaseAnalytics.ConsentStatus.DENIED,
-        )
-
-        val consentMapping = mapOf(
-            0 to FirebaseAnalytics.ConsentType.AD_STORAGE,
-            1 to FirebaseAnalytics.ConsentType.ANALYTICS_STORAGE,
-            2 to FirebaseAnalytics.ConsentType.AD_PERSONALIZATION,
-            3 to FirebaseAnalytics.ConsentType.AD_USER_DATA,
-        )
-        val userOptions = consentMapping.values.map { value -> value.name }.toTypedArray()
-        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-        builder
-            .setCancelable(false)
-            .setTitle("Choose consent signals")
-            .setMultiChoiceItems(
-                userOptions,
-                null
-            ) { _, position, isChecked ->
-                run {
-                    val consentType = consentMapping[position]!!
-                    val selectedStatus: FirebaseAnalytics.ConsentStatus = if (isChecked) {
-                        FirebaseAnalytics.ConsentStatus.GRANTED
-                    } else {
-                        FirebaseAnalytics.ConsentStatus.DENIED
-                    }
-                    userConsentMap[consentType] = selectedStatus
-                }
-            }
-            .setPositiveButton("Confirm") { _, _ ->
-                Log.d(LOG_TAG, "Consent choice confirmed")
-                FirebaseAnalytics.getInstance(this).setConsent(userConsentMap)
-                val stringifiedConsent = ObjectMapper().writeValueAsString(userConsentMap)
-                sp.edit()
-                    .putString(CONSENT_KEY, stringifiedConsent)
-                    .apply()
-            }
-        val dialog: AlertDialog = builder.create()
-        dialog.show()
+        // Firebase Analytics consent removed
     }
 }
