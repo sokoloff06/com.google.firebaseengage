@@ -34,6 +34,7 @@ class UtilActivity : AppCompatActivity() {
     private lateinit var btnWelcome: Button
     private lateinit var btnCrash: Button
     private lateinit var btnConsent: Button
+    private lateinit var btnWebView: Button
 
     companion object {
         val threadPool: ExecutorService = Executors.newCachedThreadPool()
@@ -60,6 +61,8 @@ class UtilActivity : AppCompatActivity() {
                     FirebaseAnalytics.Param.ITEMS,
                     arrayOf(purchaseItem)
                 )
+//                purchaseParams.putString(FirebaseAnalytics.Param.EVENT_ID, "USD")
+
 
                 // Whole purchase description
                 purchaseParams.putString(FirebaseAnalytics.Param.CURRENCY, "USD")
@@ -108,6 +111,14 @@ class UtilActivity : AppCompatActivity() {
                 UserMessagingPlatform.showPrivacyOptionsForm(this@UtilActivity) {
                     Log.d(LOG_TAG, "UMP Consent Form dismissed")
                 }
+            }
+        }
+
+        btnWebView = findViewById<Button?>(R.id.btn_webview).apply {
+            setOnClickListener {
+                val intent = Intent(this@UtilActivity, com.google.firebaseengage.ui.WebViewActivity::class.java)
+                intent.putExtra("EXTRA_URL", "https://gh.visokolov.com/test/webview")
+                startActivity(intent)
             }
         }
     }

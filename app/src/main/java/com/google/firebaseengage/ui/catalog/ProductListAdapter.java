@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -131,16 +132,27 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         final TextView textView;
         final TextView textPrice;
         final ImageView imageView;
+        final Button addToCartButton;
 
         ProductListAdapterViewHolder(final View itemView) {
             super(itemView);
             this.textView = itemView.findViewById(R.id.item_text);
             this.textPrice = itemView.findViewById(R.id.item_price);
             this.imageView = itemView.findViewById(R.id.item_image);
+            this.addToCartButton = itemView.findViewById(R.id.btn_add_to_cart);
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
-                productsDisplayer.onItemClicked(position);
+                if (position != RecyclerView.NO_POSITION) {
+                    productsDisplayer.onItemClicked(position);
+                }
+            });
+
+            addToCartButton.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    productsDisplayer.onAddToCartClicked(position);
+                }
             });
         }
     }

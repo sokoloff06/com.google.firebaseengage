@@ -8,6 +8,7 @@ package com.google.firebaseengage.ui.catalog;
 import static com.google.firebaseengage.ui.MainActivity.LOG_TAG;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -33,6 +34,7 @@ import com.google.firebaseengage.ui.cart.CartHandler;
 import com.google.firebaseengage.data.ProductsDbHelper;
 import com.google.firebaseengage.data.ProductsRepositoryImpl;
 import com.google.firebaseengage.data.entities.Cart;
+import com.google.firebaseengage.data.entities.Product;
 
 public class CatalogFragment extends Fragment implements ProductsDisplayer {
 
@@ -114,7 +116,9 @@ public class CatalogFragment extends Fragment implements ProductsDisplayer {
 
     public void onSwipeUpdate() {
         String color = remoteConfig.getString(KEY_BG_COLOR);
-        this.getView().setBackgroundColor(Color.parseColor(color));
+        if (getView() != null) {
+            this.getView().setBackgroundColor(Color.parseColor(color));
+        }
         Log.d(LOG_TAG, "Applied bg_color of " + color + " from Remote Config");
         loadProducts();
     }
@@ -158,7 +162,16 @@ public class CatalogFragment extends Fragment implements ProductsDisplayer {
 
     @Override
     public void onItemClicked(int position) {
+        Product product = productListAdapter.getProduct(position);
+        Intent intent = new Intent(getContext(), ProductDetailsActivity.class);
+        intent.putExtra(ProductDetailsActivity.EXTRA_PRODUCT, product);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onAddToCartClicked(int position) {
         cart.add(productListAdapter.getProduct(position));
         cartHandler.getCartAdapter().loadData();
+        Toast.makeText(getContext(), "Added to cart", Toast.LENGTH_SHORT).show();
     }
 }

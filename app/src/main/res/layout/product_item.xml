@@ -45,4 +45,14 @@
         android:textColor="#ffffff"
         android:textStyle="bold"
         tools:ignore="RelativeOverlap" />
+
+    <Button
+        android:id="@+id/btn_add_to_cart"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_below="@id/item_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp"
+        android:text="Add to Cart"
+        android:textSize="10sp" />
 </RelativeLayout>

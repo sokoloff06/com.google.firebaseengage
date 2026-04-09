@@ -17,4 +17,6 @@ public interface ProductsDisplayer {
     void loadError();
 
     void onItemClicked(int position);
+
+    void onAddToCartClicked(int position);
 }

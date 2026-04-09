@@ -5,10 +5,12 @@
 
 package com.google.firebaseengage.data.entities;
 
+import java.io.Serializable;
+
 /**
  * Created by sokol on 17.02.2017.
  */
-public class Product {
+public class Product implements Serializable {
 
     private int id;
     private String name;

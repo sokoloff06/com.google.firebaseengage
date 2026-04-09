@@ -17,6 +17,7 @@ import android.preference.PreferenceManager
 import android.util.Log
 import android.view.MenuItem
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -44,12 +45,15 @@ import com.google.firebase.inappmessaging.model.InAppMessage
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.firebaseengage.R
+import com.google.firebaseengage.data.ProductsDbHelper
+import com.google.firebaseengage.data.ProductsRepositoryImpl
 import com.google.firebaseengage.data.entities.Cart
 import com.google.firebaseengage.firebase.UtilActivity
 import com.google.firebaseengage.ui.cart.CartAdapter
 import com.google.firebaseengage.ui.cart.CartFragment
 import com.google.firebaseengage.ui.cart.CartHandler
 import com.google.firebaseengage.ui.catalog.CatalogFragment
+import com.google.firebaseengage.ui.catalog.ProductDetailsActivity
 import com.iabtcf.decoder.TCString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -64,6 +68,8 @@ class MainActivity : AppCompatActivity(), CartHandler {
     private lateinit var remoteConfig: FirebaseRemoteConfig
 
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var deferredDeepLinkPrefs: SharedPreferences
+    private lateinit var deepLinkListener: SharedPreferences.OnSharedPreferenceChangeListener
 
     companion object {
         const val LOG_TAG = "firebaseengage"
@@ -92,9 +98,23 @@ class MainActivity : AppCompatActivity(), CartHandler {
             }
     }
 
+    override fun onStart() {
+        super.onStart()
+        deferredDeepLinkPrefs.registerOnSharedPreferenceChangeListener(deepLinkListener)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        deferredDeepLinkPrefs.unregisterOnSharedPreferenceChangeListener(deepLinkListener)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Handle initial deep link
+        handleIntent(intent)
+
         // Firebase Remote Config
         // RC Demo 1: set up remote config
         setUpRemoteConfig()
@@ -173,6 +193,17 @@ class MainActivity : AppCompatActivity(), CartHandler {
         askNotificationPermission()
         registerFiamListener()
         initAppsFlyer()
+
+        deferredDeepLinkPrefs = getSharedPreferences("google.analytics.deferred.deeplink.prefs", MODE_PRIVATE)
+        deepLinkListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+            if ("deeplink" == key) {
+                val deeplink = sharedPreferences?.getString(key, null)
+                deeplink?.let {
+                    Toast.makeText(this, "Deferred Deep Link: $it", Toast.LENGTH_LONG).show()
+                    // Optionally handle the deferred deep link here
+                }
+            }
+        }
     }
 
 
@@ -283,7 +314,7 @@ class MainActivity : AppCompatActivity(), CartHandler {
                 * Legitimate interest is like opt-out, enabled by default
                 * Consent is like opt-in, disabled by default
                 */
-                val adStorageAllowed = TCString.decode(tcString).purposesConsent.contains(1)
+                val adStorageAllowed = TCString.decode(tcString!!).purposesConsent.contains(1)
                 // Always false for Google
                 // val googleAllowed = TCString.decode(tcString).allowedVendors.contains(755)
                 // Consent toggle in vendor setting (i.e. Google is not blocked from using consented data at vendor level)
@@ -320,7 +351,7 @@ class MainActivity : AppCompatActivity(), CartHandler {
             }
 
             override fun onCreate(owner: LifecycleOwner) {
-                suspend {
+                lifecycleScope.launchWhenCreated {
                     val tcString = withContext(Dispatchers.IO) { sharedPrefs.getString(iabKey, "") }
                     Log.d(LOG_TAG, "TCF String: $tcString")
                 }
@@ -403,6 +434,7 @@ class MainActivity : AppCompatActivity(), CartHandler {
         super.onNewIntent(intent)
         Log.d(LOG_TAG, "Setting new intent: $intent \nReplacing old: ${getIntent()}")
         setIntent(intent)
+        handleIntent(intent)
     }
 
     override fun onResume() {
@@ -433,11 +465,54 @@ class MainActivity : AppCompatActivity(), CartHandler {
 
     override fun onDataHasChanged() {
         val sumTextView = findViewById<TextView>(R.id.sum_text_view)
-        sumTextView.text = cart.sum.toString() + "€"
+        sumTextView?.let {
+            it.text = cart.sum.toString() + "€"
+        }
+        cartAdapter.loadData()
     }
 
     override fun getCartAdapter(): CartAdapter {
         return cartAdapter
+    }
+
+    /**
+     * Centralized deep link handling logic.
+     * Parses the incoming intent for product-related URIs and redirects to ProductDetailsActivity.
+     */
+    private fun handleIntent(intent: Intent?) {
+        val action = intent?.action
+        val data = intent?.data
+
+        if (Intent.ACTION_VIEW == action && data != null) {
+            // Check for product deep link: https://gh.visokolov.com/fruit/{product_name}
+            if ("gh.visokolov.com" == data.host && data.path?.startsWith("/fruit") == true) {
+                val productName = data.lastPathSegment
+                if (productName != null) {
+                    redirectToProduct(productName)
+                }
+            }
+        }
+    }
+
+    /**
+     * Finds the product in the local database and starts ProductDetailsActivity if found.
+     */
+    private fun redirectToProduct(name: String) {
+        val dbHelper = ProductsDbHelper(this)
+        val repository = ProductsRepositoryImpl(dbHelper.readableDatabase)
+        val products = repository.products
+
+        if (products != null) {
+            val matchedProduct = products.find { it.name.equals(name, ignoreCase = true) }
+            if (matchedProduct != null) {
+                val intent = Intent(this, ProductDetailsActivity::class.java).apply {
+                    putExtra(ProductDetailsActivity.EXTRA_PRODUCT, matchedProduct)
+                }
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Product '$name' not found", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     // Declare the launcher at the top of your Activity/Fragment:

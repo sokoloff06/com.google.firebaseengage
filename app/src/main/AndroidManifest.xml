@@ -29,33 +29,15 @@
             tools:replace="android:resource" />
 
 
-        <!--        GA4 temporary disable analytics-->
-        <!--                <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />-->
-
-        <!--GA4 temporary disable automatic events-->
-        <!--        <meta-data android:name="google_analytics_automatic_screen_reporting_enabled" android:value="false" />-->
-
-        <!--GA4 consent mode-->
-        <!--        <meta-data-->
-        <!--            android:name="google_analytics_tcf_data_enabled"-->
-        <!--            android:value="false" />-->
-        <!--        <meta-data-->
-        <!--            android:name="google_analytics_default_allow_ad_storage"-->
-        <!--            android:value="true" />-->
-        <!--        <meta-data-->
-        <!--            android:name="google_analytics_default_allow_analytics_storage"-->
-        <!--            android:value="true" />-->
-        <!--        <meta-data-->
-        <!--            android:name="google_analytics_default_allow_ad_user_data"-->
-        <!--            android:value="true" />-->
-        <!--        <meta-data-->
-        <!--            android:name="google_analytics_default_allow_ad_personalization_signals"-->
-        <!--            android:value="true" />-->
-
         <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-6765186714303261~4134963779" />
+
+        <!-- Value to be added to enable deferred deep links -->
+        <meta-data
+            android:name="google_analytics_deferred_deep_link_enabled"
+            android:value="true" />
 
         <activity
             android:name=".ui.AdsActivity"
@@ -69,10 +51,14 @@
             android:exported="true"
             android:label="@string/title_activity_main"
             android:launchMode="singleTask">
+            <tools:validation testUrl="https://gh.visokolov.com/fruit/apple" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!-- Combined Deep Link Intent Filter -->
             <intent-filter
                 android:autoVerify="true"
                 tools:targetApi="m">
@@ -81,10 +67,23 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="gh.visokolov.com" />
+                <data android:pathPrefix="/fruit" />
+
+                <tools:validation testUrl="https://gh.visokolov.com/fruit/apple" />
+            </intent-filter>
+
+            <intent-filter
+                android:autoVerify="true"
+                tools:targetApi="m">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="https" />
                 <data android:host="sokoloff06.github.io" />
-                <data android:pathPrefix="/fruit/*" />
 
                 <tools:validation testUrl="https://sokoloff06.github.io/promo" />
             </intent-filter>
@@ -100,7 +99,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="http" />
                 <data android:scheme="https" />
                 <data android:host="sokoloff06.github.io" />
                 <data android:path="/promo" />
@@ -109,13 +107,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".firebase.UtilActivity"
-            android:exported="true">
-            <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
+            android:name=".firebase.UtilActivity">
         </activity>
+        <activity
+            android:name=".ui.catalog.ProductDetailsActivity"
+            android:exported="false"
+            android:label="Product Details" />
+        <activity
+            android:name=".ui.WebViewActivity"
+            android:exported="false"
+            android:label="WebView" />
 
         <!-- Preview Activity for GTM -->
         <activity
@@ -152,17 +153,10 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <!--
- Set custom default icon. This is used when no icon is set for incoming notification messages.
-See README(https://goo.gl/l4GJaQ) for more.
-        -->
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_firebase_logo_logomark" />
-        <!--
- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more.
-        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/orange_400" />
