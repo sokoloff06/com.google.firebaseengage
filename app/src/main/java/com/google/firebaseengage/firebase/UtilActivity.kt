@@ -44,7 +44,6 @@ class UtilActivity : AppCompatActivity() {
         Log.d(LOG_TAG, "onCreate: $intent")
         btnConversion = findViewById<Button>(R.id.btn_conversion).apply {
             setOnClickListener {
-                // Firebase Analytics logging removed
             }
         }
         btnGetToken = findViewById<Button?>(R.id.btn_get_token).apply {
@@ -68,7 +67,6 @@ class UtilActivity : AppCompatActivity() {
         }
         btnWelcome = findViewById<Button?>(R.id.btn_welcome).apply {
             setOnClickListener {
-                // Firebase Analytics logging removed
             }
         }
 

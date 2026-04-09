@@ -185,7 +185,6 @@ class MainActivity : AppCompatActivity(), CartHandler {
 
 
     private fun logScreenView() {
-        // Firebase Analytics logging removed
     }
 
     private fun initAppsFlyer() {
@@ -197,11 +196,9 @@ class MainActivity : AppCompatActivity(), CartHandler {
     }
 
     fun setAllConsent(granted: Boolean) {
-        // Firebase Analytics consent removed
     }
 
     private fun askAdMobConsent() {
-        // Firebase Analytics logging removed
 //        setAllConsent(false)
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
         sharedPrefs.edit().apply {
@@ -485,6 +482,5 @@ class MainActivity : AppCompatActivity(), CartHandler {
     }
 
     private fun askUserConsentInHouse(sp: SharedPreferences) {
-        // Firebase Analytics consent removed
     }
 }

@@ -78,7 +78,6 @@ public class CartFragment extends Fragment {
         sendPurchaseButton.setOnClickListener(view -> {
             Context ctx = getContext();
             if (ctx != null) {
-                // Firebase Analytics logging removed
                 Log.d(LOG_TAG, "Logging event (removed)");
             }
         });

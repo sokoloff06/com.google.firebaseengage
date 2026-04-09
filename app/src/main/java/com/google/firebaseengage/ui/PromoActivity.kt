@@ -19,7 +19,6 @@ class PromoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_promo)
         btnConversion = findViewById<Button>(R.id.btn_conversion).apply {
             setOnClickListener {
-                // Firebase Analytics logging removed
             }
         }
     }
