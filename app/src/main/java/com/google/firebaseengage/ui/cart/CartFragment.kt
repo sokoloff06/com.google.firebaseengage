@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -135,7 +136,12 @@ class CartFragment : Fragment() {
     }
 
     private fun performPurchase() {
-        // TODO: diplay toast
+        cart.clear()
+        cartSum.value = 0
+        cartItems.value = emptyList()
+        cartHandler.onDataHasChanged()
+        cartHandler.refreshCart()
+        Toast.makeText(context, "Purchase performed", Toast.LENGTH_SHORT).show()
     }
 }
 

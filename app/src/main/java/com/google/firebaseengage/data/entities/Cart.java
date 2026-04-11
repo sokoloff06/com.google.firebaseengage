@@ -21,6 +21,10 @@ public class Cart {
         return savedProducts;
     }
 
+    public void clear() {
+        savedProducts.clear();
+    }
+
     public void setProducts(Map<Integer, ProductRecord> products) {
         this.savedProducts = products;
     }
