@@ -83,12 +83,16 @@ public class CatalogFragment extends Fragment implements ProductsDisplayer {
     }
 
     private void setDataVisible() {
-        productListRecyclerView.setVisibility(View.VISIBLE);
+        if (productListRecyclerView != null) {
+            productListRecyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
 
     void setLoadingVisible() {
-        productListRecyclerView.setVisibility(View.INVISIBLE);
+        if (productListRecyclerView != null) {
+            productListRecyclerView.setVisibility(View.INVISIBLE);
+        }
     }
 
     public boolean isNetworkOnline() {
@@ -172,7 +176,7 @@ public class CatalogFragment extends Fragment implements ProductsDisplayer {
     public void onAddToCartClicked(int position) {
         Product product = productListAdapter.getProduct(position);
         cart.add(product);
-        cartHandler.getCartAdapter().loadData();
+        cartHandler.refreshCart();
         Toast.makeText(getContext(), "Added to cart", Toast.LENGTH_SHORT).show();
     }
 }

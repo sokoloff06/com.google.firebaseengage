@@ -48,7 +48,6 @@ import com.google.firebaseengage.data.ProductsDbHelper
 import com.google.firebaseengage.data.ProductsRepositoryImpl
 import com.google.firebaseengage.data.entities.Cart
 import com.google.firebaseengage.firebase.UtilActivity
-import com.google.firebaseengage.ui.cart.CartAdapter
 import com.google.firebaseengage.ui.cart.CartFragment
 import com.google.firebaseengage.ui.cart.CartHandler
 import com.google.firebaseengage.ui.catalog.CatalogFragment
@@ -61,7 +60,6 @@ import com.google.firebaseengage.data.entities.CartManager
 class MainActivity : AppCompatActivity(), CartHandler {
     private lateinit var navigationView: NavigationView
     private var cart = CartManager.getInstance()
-    private var cartAdapter = CartAdapter(this)
     private lateinit var navDrawer: DrawerLayout
     private lateinit var viewPager: ViewPager
     private lateinit var remoteConfig: FirebaseRemoteConfig
@@ -367,7 +365,7 @@ class MainActivity : AppCompatActivity(), CartHandler {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         Log.d(LOG_TAG, "Setting new intent: $intent \nReplacing old: ${getIntent()}")
         setIntent(intent)
@@ -394,6 +392,12 @@ class MainActivity : AppCompatActivity(), CartHandler {
         FirebaseInAppMessaging.getInstance().addImpressionListener(fiamImpressionListener)
         FirebaseInAppMessaging.getInstance().addDismissListener(fiamDismissLister)
         logScreenView()
+        
+        // Ensure cart data is updated when coming back from other activities
+        val cartFragment = (viewPager.adapter as MainPagerAdapter).getItem(1) as? CartFragment
+        if (cartFragment?.isAdded == true) {
+            cartFragment.onSwipeUpdate()
+        }
     }
 
     override fun getCart(): Cart {
@@ -401,15 +405,17 @@ class MainActivity : AppCompatActivity(), CartHandler {
     }
 
     override fun onDataHasChanged() {
-        val sumTextView = findViewById<TextView>(R.id.sum_text_view)
-        sumTextView?.let {
-            it.text = cart.sum.toString() + "€"
+        // No longer needed, UI handles its own state
+    }
+
+    override fun refreshCart() {
+        val cartFragment = (viewPager.adapter as MainPagerAdapter).getItem(1) as? CartFragment
+        if (cartFragment?.isAdded == true) {
+            cartFragment.onSwipeUpdate()
         }
     }
 
-    override fun getCartAdapter(): CartAdapter {
-        return cartAdapter
-    }
+
 
     /**
      * Centralized deep link handling logic.

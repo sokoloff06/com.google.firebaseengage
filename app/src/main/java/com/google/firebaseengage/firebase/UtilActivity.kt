@@ -107,7 +107,7 @@ class UtilActivity : AppCompatActivity() {
         FirebaseInAppMessaging.getInstance().addDismissListener(MainActivity.fiamDismissLister)
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         Log.d(LOG_TAG, "onNewIntent: $intent")
     }

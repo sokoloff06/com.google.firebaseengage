@@ -16,5 +16,5 @@ public interface CartHandler {
 
     void onDataHasChanged();
 
-    CartAdapter getCartAdapter();
+    void refreshCart();
 }
